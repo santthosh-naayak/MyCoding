@@ -40,5 +40,9 @@ public class Main {
         // set method
         myLinkedList3.set(3, 5);// setting the value 5 at index 3
         myLinkedList3.printList();
+        // insert method
+        myLinkedList3.insert(3, 4);// At index 3, I want to insert node with value 4
+        System.out.println("insert Method" + "\n");
+        myLinkedList3.printList();
     }
 }

@@ -133,4 +133,24 @@ public class LinkedList {
         return false;
     }
 
+    // insert method
+    public boolean insert(int index, int value) {
+        if (index < 0 || index > length) // Cannot insert at negative index, if index is equal to lenth means to append
+            return false;
+        if (index == 0) { // Means prepend
+            prepend(value);
+            return true;
+        }
+        if (index == length) {// append
+            append(value);
+            return true;
+        }
+        Node newNode = new Node(value);
+        Node temp = get(index - 1); // Gettting the previous index of where the new node to insert by get method
+        newNode.next = temp.next; // set the pointer first
+        temp.next = newNode;// as we got the previous node by index we can next next to new node
+        length++;// as we are inserting, this will increase the length
+        return true;
+    }
+
 }
