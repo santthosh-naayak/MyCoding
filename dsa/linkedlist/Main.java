@@ -18,5 +18,10 @@ public class Main {
                                                         * null.value will cause NullPointer exception, no .value is
                                                         * removed it will print null
                                                         */
+        System.out.println("New Linked List");
+        LinkedList myLinkedList2 = new LinkedList(2);
+        myLinkedList2.append(3);
+        myLinkedList2.prepend(1); // Prepend
+        myLinkedList2.printList();
     }
 }
