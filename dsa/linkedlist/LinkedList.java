@@ -86,14 +86,30 @@ public class LinkedList {
     // Prepend Method
     public void prepend(int value) {
         Node newNode = new Node(value);
-        if (length == 0) {
+        if (length == 0) {// if length is zero, added value will be head and tail
             head = newNode;
             tail = newNode;
         } else {
-            newNode.next = head;
-            head = newNode;
+            newNode.next = head; // we will give head as a pointer to the new node
+            head = newNode;// Then we will move head to new node
         }
         length++;
+    }
+
+    // Remove first method
+    public Node removeFirst() {
+        if (length == 0)
+            return null; // Checks if linkedlist is null
+        Node temp = head; // as we will return node, lets initially say temp as head
+        head = head.next; // move head to head.next as we are removing the head
+        temp.next = null; // as teamp is head initially, make temp next as null, so initial head is
+                          // removed
+        length--;
+        if (length == 0) { // If linked list has only one Node
+            tail = null; // We have already set head as null, so we need to make tail also null to remove
+                         // the one and only one node
+        }
+        return temp; // returning the removed node .
     }
 
 }

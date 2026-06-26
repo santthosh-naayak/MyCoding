@@ -23,5 +23,10 @@ public class Main {
         myLinkedList2.append(3);
         myLinkedList2.prepend(1); // Prepend
         myLinkedList2.printList();
+        System.out.println("Removing the first");
+        System.out.println(myLinkedList2.removeFirst().value);// removing the first
+        System.out.println(myLinkedList2.removeFirst().value);// removing the first of remaining
+        System.out.println(myLinkedList2.removeFirst().value);// removing the first of remaining
+        System.out.println(myLinkedList2.removeFirst());// length became zero so returning null
     }
 }
