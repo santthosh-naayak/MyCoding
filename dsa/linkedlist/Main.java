@@ -36,6 +36,9 @@ public class Main {
         myLinkedList3.append(3);
         System.err.println(myLinkedList3.get(2).value + "\n");// getting the value of node at index 2
         myLinkedList3.printList();
-
+        System.out.println("Set Method" + "\n");
+        // set method
+        myLinkedList3.set(3, 5);// setting the value 5 at index 3
+        myLinkedList3.printList();
     }
 }

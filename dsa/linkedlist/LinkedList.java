@@ -115,12 +115,22 @@ public class LinkedList {
     // get method with index
     public Node get(int index) {
         if (index < 0 || index >= length)
-            return null;
+            return null; // index can't be negative and greater than or equal to 0 as index starts with 0
         Node temp = head;
         for (int i = 0; i < index; i++) {
             temp = temp.next;
         }
         return temp;
+    }
+
+    // set the value by index
+    public boolean set(int index, int value) {
+        Node temp = get(index); // We can use get method to get the node at that index
+        if (temp != null) {
+            temp.value = value; // setting the value
+            return true;
+        }
+        return false;
     }
 
 }
