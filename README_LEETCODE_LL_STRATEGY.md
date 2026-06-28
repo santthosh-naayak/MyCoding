@@ -486,3 +486,414 @@ The expected solution is almost always **Floyd's Cycle Detection Algorithm (Slow
 * This is one of the most important Linked List interview questions and demonstrates the power of the **Two Pointer Technique**.
 
 ---
+
+# 🚀 MyCoding - Data Structures & Algorithms in Java
+
+# 🔗 Strategy 3: Find Kth Node From End
+
+Finding the **k-th node from the end** is one of the most common Linked List interview questions. It tests your understanding of **pointer manipulation**, **single-pass traversal**, and the **Two Pointer Technique**.
+
+---
+
+# 📖 Problem Statement
+
+Implement a method called **`findKthFromEnd(int k)`** that returns the **k-th node from the end** of a singly linked list.
+
+The linked list **does not store its length**, so you cannot use a size property.
+
+The solution must traverse the linked list **only once**.
+
+---
+
+# 📌 Rules
+
+The value of **k** is **1-based**.
+
+* `k = 1` → Returns the last node (Tail)
+* `k = 2` → Returns the second-last node
+* `k = list length` → Returns the Head
+* `k <= 0` → Returns `null`
+* `k > list length` → Returns `null`
+
+---
+
+# 💡 Example
+
+Given the linked list:
+
+```id="eflqgg"
+Head
+
+↓
+
+1 → 2 → 3 → 4 → 5 → null
+```
+
+| k | Returned Node |
+| - | ------------- |
+| 1 | 5             |
+| 2 | 4             |
+| 3 | 3             |
+| 4 | 2             |
+| 5 | 1             |
+| 6 | null          |
+| 0 | null          |
+
+---
+
+# 🎯 Constraints
+
+* Traverse the linked list only once.
+* Do not calculate the length beforehand.
+* Do not use arrays or additional data structures.
+* Extra space should remain constant.
+
+---
+
+# 🐢🐇 Recommended Approach
+
+## Two Pointer Technique
+
+Use two pointers:
+
+* **Fast Pointer**
+* **Slow Pointer**
+
+### Step 1
+
+Move the **fast pointer** `k` nodes ahead.
+
+### Step 2
+
+Now move **both pointers together**, one node at a time.
+
+### Step 3
+
+When the **fast pointer reaches the end**, the **slow pointer** will be exactly at the **k-th node from the end**.
+
+This approach completes the task in **one traversal**.
+
+---
+
+# 🖼 Visualization
+
+## Example
+
+Find the **2nd node from the end**
+
+```id="bifbup"
+Head
+
+↓
+
+1 → 2 → 3 → 4 → 5 → null
+```
+
+Move the **fast pointer** two steps ahead.
+
+```id="s1w9el"
+Slow
+
+↓
+
+1 → 2 → 3 → 4 → 5
+
+          ↑
+         Fast
+```
+
+Now move both pointers together.
+
+---
+
+### Step 1
+
+```id="06nj0q"
+Slow → 2
+
+Fast → 4
+```
+
+---
+
+### Step 2
+
+```id="awdy0m"
+Slow → 3
+
+Fast → 5
+```
+
+---
+
+### Step 3
+
+```id="eyyq3z"
+Slow → 4
+
+Fast → null
+```
+
+The fast pointer reached the end.
+
+Therefore,
+
+```id="udkm3h"
+Return Node 4
+```
+
+---
+
+# 💻 Java Solution
+
+```java
+public Node findKthFromEnd(int k) {
+
+    if (k <= 0) {
+        return null;
+    }
+
+    Node slow = head;
+    Node fast = head;
+
+    for (int i = 0; i < k; i++) {
+
+        if (fast == null) {
+            return null;
+        }
+
+        fast = fast.next;
+    }
+
+    while (fast != null) {
+        slow = slow.next;
+        fast = fast.next;
+    }
+
+    return slow;
+}
+```
+
+---
+
+# ⚙️ Algorithm
+
+1. If `k <= 0`, return `null`.
+2. Initialize **slow** and **fast** pointers at the head.
+3. Move the **fast pointer** ahead by `k` nodes.
+4. If the fast pointer becomes `null` before completing `k` steps, return `null`.
+5. Move both pointers one step at a time.
+6. When the fast pointer reaches `null`, return the slow pointer.
+
+---
+
+# 📊 Dry Run
+
+Suppose
+
+```id="9qldaf"
+1 → 2 → 3 → 4 → 5
+```
+
+Find
+
+```id="0bpw9i"
+k = 2
+```
+
+Initial
+
+```id="p2lq2o"
+Slow = 1
+
+Fast = 1
+```
+
+Move Fast 2 Steps
+
+```id="oq2w6r"
+Slow = 1
+
+Fast = 3
+```
+
+Move Both
+
+```id="d5mj08"
+Slow = 2
+
+Fast = 4
+```
+
+↓
+
+```id="7y6n9r"
+Slow = 3
+
+Fast = 5
+```
+
+↓
+
+```id="c5kdwn"
+Slow = 4
+
+Fast = null
+```
+
+Result
+
+```id="br5znx"
+Node 4
+```
+
+---
+
+# ⚠️ Edge Cases
+
+### Empty List
+
+```id="4a4m7z"
+Head = null
+```
+
+Returns
+
+```id="t11llv"
+null
+```
+
+---
+
+### k = 0
+
+```id="f7i5yz"
+findKthFromEnd(0)
+```
+
+Returns
+
+```id="o84qbe"
+null
+```
+
+---
+
+### k < 0
+
+```id="nbzc1r"
+findKthFromEnd(-3)
+```
+
+Returns
+
+```id="8nk6qt"
+null
+```
+
+---
+
+### k Greater Than List Length
+
+```id="hjvnsb"
+1 → 2 → 3
+```
+
+```id="3smgof"
+findKthFromEnd(5)
+```
+
+Returns
+
+```id="yqjlwm"
+null
+```
+
+---
+
+### k Equals List Length
+
+```id="a6wzng"
+1 → 2 → 3 → 4 → 5
+```
+
+```id="89t3mr"
+findKthFromEnd(5)
+```
+
+Returns
+
+```id="30zq3z"
+Head (Node 1)
+```
+
+---
+
+# ⏱ Time Complexity
+
+```id="cqvdfo"
+O(n)
+```
+
+Only one traversal of the linked list is performed.
+
+---
+
+# 💾 Space Complexity
+
+```id="i2q9q4"
+O(1)
+```
+
+Only two pointers are used.
+
+---
+
+# ✅ Why This Approach?
+
+A simple approach would be:
+
+1. Traverse the list to calculate its length.
+2. Traverse again to locate the required node.
+
+This requires **two traversals**.
+
+Using the **Two Pointer Technique**, we complete the task in **one traversal**, making it more efficient and interview-friendly.
+
+---
+
+# 📌 Interview Tip
+
+Whenever you hear questions like:
+
+* Find the k-th node from the end.
+* Remove the N-th node from the end.
+* Find the last k-th element.
+* Solve it without knowing the length.
+* Can you do it in one pass?
+
+Think of the **Two Pointer Technique**.
+
+This is one of the most frequently asked Linked List patterns in coding interviews.
+
+---
+
+# 📊 Complexity Summary
+
+| Operation        | Complexity |
+| ---------------- | ---------- |
+| Time Complexity  | **O(n)**   |
+| Space Complexity | **O(1)**   |
+
+---
+
+# 🎓 Key Takeaways
+
+* The linked list length is unknown.
+* Use **Fast** and **Slow** pointers.
+* Move the fast pointer `k` nodes ahead.
+* Move both pointers together until the fast pointer reaches the end.
+* The slow pointer will be pointing to the **k-th node from the end**.
+* This solution uses only one traversal and constant extra space.
+
+---
