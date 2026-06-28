@@ -897,3 +897,417 @@ This is one of the most frequently asked Linked List patterns in coding intervie
 * This solution uses only one traversal and constant extra space.
 
 ---
+# 🚀 MyCoding - Data Structures & Algorithms in Java
+
+# 🧠 Strategy 4: Remove Duplicates
+
+Removing duplicate values from a Linked List is a common interview question that tests your understanding of **Linked Lists**, **pointer manipulation**, and **HashSet optimization**.
+
+This problem can be solved using two different approaches:
+
+* **Using a HashSet** (Optimal)
+* **Without Using Extra Space** (Brute Force)
+
+---
+
+# 📖 Problem Statement
+
+You are given a singly linked list containing integer values. Some of these values may appear more than once.
+
+Your task is to implement the **`removeDuplicates()`** method that removes all duplicate values **in-place**, while preserving the order of the first occurrence of each value.
+
+> **Note:** This Linked List implementation does **not** maintain a `tail` pointer, making the implementation simpler.
+
+---
+
+# 📌 Requirements
+
+* Modify the existing linked list.
+* Do not create a new linked list.
+* Preserve the order of unique elements.
+* Remove only duplicate occurrences.
+
+---
+
+# 💡 Example
+
+Input
+
+```text
+Head
+
+↓
+
+1 → 2 → 3 → 1 → 4 → 2 → 5 → null
+```
+
+Output
+
+```text
+Head
+
+↓
+
+1 → 2 → 3 → 4 → 5 → null
+```
+
+---
+
+# 🎯 Approach 1: Using HashSet (Optimal)
+
+A **HashSet** stores all unique values encountered while traversing the linked list.
+
+For each node:
+
+* If the value already exists in the HashSet, remove the node.
+* Otherwise, add the value to the HashSet and continue.
+
+This avoids repeatedly searching the list.
+
+---
+
+# 🖼 Visualization
+
+Initial List
+
+```text
+1 → 2 → 3 → 1 → 4 → 2 → 5
+```
+
+HashSet Progress
+
+```text
+Visit 1
+
+Set = {1}
+```
+
+↓
+
+```text
+Visit 2
+
+Set = {1,2}
+```
+
+↓
+
+```text
+Visit 3
+
+Set = {1,2,3}
+```
+
+↓
+
+```text
+Visit 1
+
+Already Exists ❌
+
+Remove Node
+```
+
+↓
+
+```text
+Visit 4
+
+Set = {1,2,3,4}
+```
+
+↓
+
+```text
+Visit 2
+
+Already Exists ❌
+
+Remove Node
+```
+
+↓
+
+```text
+Visit 5
+
+Set = {1,2,3,4,5}
+```
+
+Final List
+
+```text
+1 → 2 → 3 → 4 → 5
+```
+
+---
+
+# 💻 Java Solution (Using HashSet)
+
+```java
+public void removeDuplicates() {
+
+    HashSet<Integer> set = new HashSet<>();
+
+    Node previous = null;
+    Node current = head;
+
+    while (current != null) {
+
+        if (set.contains(current.value)) {
+
+            previous.next = current.next;
+
+        } else {
+
+            set.add(current.value);
+            previous = current;
+
+        }
+
+        current = current.next;
+    }
+
+}
+```
+
+---
+
+# ⚙️ Algorithm
+
+1. Create an empty HashSet.
+2. Traverse the linked list.
+3. If the current value is already present:
+
+   * Remove the node.
+4. Otherwise:
+
+   * Store the value in the HashSet.
+   * Move the previous pointer.
+5. Continue until the end of the list.
+
+---
+
+# ⏱ Time Complexity
+
+```text
+O(n)
+```
+
+Each node is visited only once.
+
+---
+
+# 💾 Space Complexity
+
+```text
+O(n)
+```
+
+The HashSet stores all unique values.
+
+---
+
+# 🎯 Approach 2: Without Using Extra Space
+
+If additional data structures are not allowed, compare every node with all remaining nodes.
+
+Whenever a duplicate is found, remove it.
+
+Although this approach does not use extra memory, it requires nested traversal.
+
+---
+
+# 🖼 Visualization
+
+```text
+1 → 2 → 3 → 1 → 4 → 2 → 5
+```
+
+Outer Loop
+
+```text
+Current = 1
+```
+
+Inner Loop removes
+
+```text
+Duplicate 1
+```
+
+---
+
+Outer Loop
+
+```text
+Current = 2
+```
+
+Inner Loop removes
+
+```text
+Duplicate 2
+```
+
+Final List
+
+```text
+1 → 2 → 3 → 4 → 5
+```
+
+---
+
+# 💻 Java Solution (Without HashSet)
+
+```java
+public void removeDuplicates() {
+
+    Node current = head;
+
+    while (current != null) {
+
+        Node runner = current;
+
+        while (runner.next != null) {
+
+            if (runner.next.value == current.value) {
+
+                runner.next = runner.next.next;
+
+            } else {
+
+                runner = runner.next;
+
+            }
+
+        }
+
+        current = current.next;
+
+    }
+
+}
+```
+
+---
+
+# ⚙️ Algorithm
+
+1. Start with the first node.
+2. Compare it with every remaining node.
+3. Remove duplicate nodes.
+4. Move to the next unique node.
+5. Repeat until the list ends.
+
+---
+
+# ⚠️ Edge Cases
+
+### Empty List
+
+```text
+Head → null
+```
+
+Output
+
+```text
+null
+```
+
+---
+
+### Single Node
+
+```text
+5
+```
+
+Output
+
+```text
+5
+```
+
+---
+
+### No Duplicates
+
+```text
+1 → 2 → 3 → 4
+```
+
+Output
+
+```text
+1 → 2 → 3 → 4
+```
+
+---
+
+### All Elements Same
+
+```text
+7 → 7 → 7 → 7
+```
+
+Output
+
+```text
+7
+```
+
+---
+
+### Consecutive Duplicates
+
+```text
+1 → 1 → 2 → 2 → 3 → 3
+```
+
+Output
+
+```text
+1 → 2 → 3
+```
+
+---
+
+# 📊 Complexity Comparison
+
+| Approach        | Time      | Space    |
+| --------------- | --------- | -------- |
+| Using HashSet   | **O(n)**  | **O(n)** |
+| Without HashSet | **O(n²)** | **O(1)** |
+
+---
+
+# 📌 Interview Tip
+
+Whenever an interviewer asks questions like:
+
+* Remove duplicate values.
+* Keep only unique elements.
+* Remove repeated nodes.
+* Can you solve it without extra space?
+* Can you optimize using a HashSet?
+
+Think about these two approaches:
+
+1. **HashSet** → Best Time Complexity (**O(n)**)
+2. **Runner Technique** → No Extra Space (**O(n²)**)
+
+Interviewers often ask for both solutions to evaluate your understanding of **time-space trade-offs**.
+
+---
+
+# 🎓 Key Takeaways
+
+* Duplicate values should be removed **in-place**.
+* The order of unique elements must remain unchanged.
+* **HashSet** provides an optimal **O(n)** solution.
+* Without extra space, the **Runner Technique** solves the problem in **O(n²)**.
+* This is one of the classic Linked List interview questions for understanding optimization and pointer manipulation.
+
+---
