@@ -199,3 +199,290 @@ Think about the **Slow & Fast Pointer Technique** first. It is one of the most c
 
 ---
 
+# 🚀 MyCoding - Data Structures & Algorithms in Java
+
+# 🔗 Strategy 2: Detect Loop (Has Loop)
+
+One of the most frequently asked Linked List interview questions is to determine whether a linked list contains a **cycle (loop)**.
+
+This problem is commonly asked in coding interviews because it tests your understanding of **Linked Lists**, **Pointers**, and the **Two Pointer Technique**.
+
+---
+
+# 📖 Problem Statement
+
+Write a method called **`hasLoop()`** that detects whether a singly linked list contains a cycle.
+
+A cycle exists when one of the nodes points back to a previous node instead of pointing to `null`.
+
+Instead of ending like a normal linked list, the nodes continue to repeat forever.
+
+---
+
+# 💡 Example of a Normal Linked List
+
+```
+Head
+
+↓
+
+10 → 20 → 30 → 40 → null
+```
+
+There is **no loop**.
+
+Output
+
+```
+false
+```
+
+---
+
+# 💡 Example of a Linked List with a Loop
+
+```
+Head
+
+↓
+
+10 → 20 → 30 → 40
+      ↑          |
+      |__________|
+```
+
+Node **40** points back to **20**, creating a cycle.
+
+Output
+
+```
+true
+```
+
+---
+
+# 🎯 Constraints
+
+* Do not use additional data structures like:
+
+  * Array
+  * ArrayList
+  * HashSet
+  * HashMap
+* Traverse the linked list only once.
+* Do not modify the existing linked list.
+* Extra Space Allowed: **O(1)**
+
+---
+
+# 🐢🐇 Recommended Approach
+
+## Floyd's Cycle Detection Algorithm
+
+Also known as the **Tortoise and Hare Algorithm**.
+
+This algorithm uses two pointers:
+
+* **Slow Pointer** → Moves one node at a time.
+* **Fast Pointer** → Moves two nodes at a time.
+
+If the linked list contains a loop, the fast pointer will eventually catch up with the slow pointer.
+
+If there is no loop, the fast pointer will eventually reach `null`.
+
+---
+
+# ⚙️ Algorithm
+
+1. Initialize both pointers at the head.
+2. Move **slow** one step.
+3. Move **fast** two steps.
+4. If both pointers meet, return `true`.
+5. If the fast pointer reaches `null`, return `false`.
+
+---
+
+# 🖼 Visualization
+
+## Example Without Loop
+
+```
+Head
+
+↓
+
+10 → 20 → 30 → 40 → null
+```
+
+Movement
+
+```
+Step 1
+
+Slow → 20
+
+Fast → 30
+
+------------------
+
+Step 2
+
+Slow → 30
+
+Fast → null
+```
+
+Since the fast pointer reached the end of the list,
+
+```
+Return false
+```
+
+---
+
+## Example With Loop
+
+```
+Head
+
+↓
+
+10 → 20 → 30 → 40
+      ↑          |
+      |__________|
+```
+
+Movement
+
+```
+Initial
+
+Slow = 10
+
+Fast = 10
+
+------------------
+
+Step 1
+
+Slow = 20
+
+Fast = 30
+
+------------------
+
+Step 2
+
+Slow = 30
+
+Fast = 20
+
+------------------
+
+Step 3
+
+Slow = 40
+
+Fast = 40
+```
+
+Both pointers meet.
+
+```
+Return true
+```
+
+---
+
+# 💻 Java Solution
+
+```java
+public boolean hasLoop() {
+
+    Node slow = head;
+    Node fast = head;
+
+    while (fast != null && fast.next != null) {
+
+        slow = slow.next;
+        fast = fast.next.next;
+
+        if (slow == fast) {
+            return true;
+        }
+
+    }
+
+    return false;
+}
+```
+
+---
+
+# ⏱ Time Complexity
+
+```
+O(n)
+```
+
+Only one traversal of the linked list is required.
+
+---
+
+# 💾 Space Complexity
+
+```
+O(1)
+```
+
+Only two pointers are used.
+
+---
+
+# ✅ Why This Algorithm?
+
+A brute-force approach would require storing visited nodes in a collection like a `HashSet`, which takes extra memory.
+
+Floyd's Algorithm is more efficient because:
+
+* Uses constant extra space.
+* Traverses the list only once.
+* Does not modify the linked list.
+* Works for loops of any size.
+
+---
+
+# 📌 Interview Tip
+
+Whenever an interviewer asks questions like:
+
+* Does this linked list contain a cycle?
+* Detect a loop in a linked list.
+* Find whether a node repeats.
+* Can you solve it without extra memory?
+
+The expected solution is almost always **Floyd's Cycle Detection Algorithm (Slow & Fast Pointer Technique)**.
+
+---
+
+# 📊 Complexity Summary
+
+| Operation        | Complexity |
+| ---------------- | ---------- |
+| Time Complexity  | **O(n)**   |
+| Space Complexity | **O(1)**   |
+
+---
+
+# 🎓 Key Takeaways
+
+* A loop occurs when a node points back to a previous node instead of `null`.
+* Use two pointers:
+
+  * Slow → Moves one node.
+  * Fast → Moves two nodes.
+* If the pointers meet, a loop exists.
+* If the fast pointer reaches `null`, there is no loop.
+* This is one of the most important Linked List interview questions and demonstrates the power of the **Two Pointer Technique**.
+
+---
