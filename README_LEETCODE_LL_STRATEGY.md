@@ -2547,6 +2547,392 @@ This is one of the most frequently asked Linked List interview patterns.
 * This is a classic pointer manipulation problem commonly asked in coding interviews.
 
 ---
+# 🚀 MyCoding - Data Structures & Algorithms in Java
+
+# 🧠 Strategy 8: Swap Nodes in Pairs *(LeetCode #24)*
+
+> ⚠️ **Classic Linked List Interview Question**
+
+Swapping nodes in pairs is one of the most popular Linked List interview problems. The challenge is to **swap the actual nodes by changing their `next` pointers**, not by swapping their values.
+
+This problem helps you master pointer manipulation and teaches how to safely rearrange nodes in-place.
+
+---
+
+# 📖 Problem Statement
+
+Given the head of a singly linked list, swap every two adjacent nodes and return the modified list.
+
+You must:
+
+* Swap the **nodes**, not their values.
+* Modify the linked list **in-place**.
+* Work without using any extra data structures.
+
+> **Note:** The linked list does **not** have `tail` or `length` attributes.
+
+---
+
+# 📌 Method Signature
+
+```java
+public void swapPairs()
+```
+
+---
+
+# 🎯 Constraints
+
+The solution should work correctly for:
+
+* ✅ Empty linked list
+* ✅ Single node
+* ✅ Even number of nodes
+* ✅ Odd number of nodes
+
+---
+
+# 💡 Example 1
+
+### Input
+
+```text
+1 → 2 → 3 → 4
+```
+
+### Output
+
+```text
+2 → 1 → 4 → 3
+```
+
+---
+
+# 💡 Example 2
+
+### Input
+
+```text
+1 → 2 → 3 → 4 → 5
+```
+
+### Output
+
+```text
+2 → 1 → 4 → 3 → 5
+```
+
+The last node remains unchanged because it has no adjacent node to swap with.
+
+---
+
+# ❓ Why Not Swap Values?
+
+A beginner's approach might be:
+
+```text
+1 → 2
+```
+
+Swap values
+
+```text
+2 → 1
+```
+
+Although the output looks correct, the **nodes themselves have not moved**.
+
+Interviewers expect you to change the **next pointers**, not the node values.
+
+---
+
+# 💡 Recommended Approach
+
+The easiest approach is to use a **dummy node**.
+
+The dummy node simplifies swapping when the head itself is involved.
+
+For every pair:
+
+1. Identify the first node.
+2. Identify the second node.
+3. Save the node after the pair.
+4. Reverse the two nodes.
+5. Move to the next pair.
+
+---
+
+# 🖼 Visualization
+
+Original List
+
+```text
+1 → 2 → 3 → 4
+```
+
+Swap First Pair
+
+```text
+2 → 1 → 3 → 4
+```
+
+Swap Second Pair
+
+```text
+2 → 1 → 4 → 3
+```
+
+Final Output
+
+```text
+2 → 1 → 4 → 3
+```
+
+---
+
+# 🖼 Pointer Visualization
+
+Before Swap
+
+```text
+prev
+ ↓
+1 → 2 → 3 → 4
+    ↑
+ second
+```
+
+After Swap
+
+```text
+prev
+ ↓
+2 → 1 → 3 → 4
+```
+
+Continue with the next pair.
+
+---
+
+# 💻 Java Solution
+
+```java
+public void swapPairs() {
+
+    Node dummy = new Node(0);
+    dummy.next = head;
+
+    Node prev = dummy;
+
+    while (prev.next != null && prev.next.next != null) {
+
+        Node first = prev.next;
+        Node second = first.next;
+
+        first.next = second.next;
+        second.next = first;
+        prev.next = second;
+
+        prev = first;
+    }
+
+    head = dummy.next;
+}
+```
+
+---
+
+# ⚙️ Algorithm
+
+1. Create a dummy node before the head.
+2. Initialize `prev` to the dummy node.
+3. While two nodes are available:
+
+   * Store the first and second nodes.
+   * Connect the first node to the node after the pair.
+   * Point the second node to the first node.
+   * Connect the previous part of the list to the second node.
+   * Move `prev` to the end of the swapped pair.
+4. Update the head using the dummy node.
+
+---
+
+# 📊 Dry Run
+
+Input
+
+```text
+1 → 2 → 3 → 4
+```
+
+### Iteration 1
+
+Swap
+
+```text
+1 ↔ 2
+```
+
+Result
+
+```text
+2 → 1 → 3 → 4
+```
+
+---
+
+### Iteration 2
+
+Swap
+
+```text
+3 ↔ 4
+```
+
+Result
+
+```text
+2 → 1 → 4 → 3
+```
+
+---
+
+### Final Output
+
+```text
+2 → 1 → 4 → 3
+```
+
+---
+
+# ⚠️ Edge Cases
+
+### Empty List
+
+Input
+
+```text
+null
+```
+
+Output
+
+```text
+null
+```
+
+---
+
+### Single Node
+
+Input
+
+```text
+1
+```
+
+Output
+
+```text
+1
+```
+
+---
+
+### Two Nodes
+
+Input
+
+```text
+1 → 2
+```
+
+Output
+
+```text
+2 → 1
+```
+
+---
+
+### Odd Number of Nodes
+
+Input
+
+```text
+1 → 2 → 3 → 4 → 5
+```
+
+Output
+
+```text
+2 → 1 → 4 → 3 → 5
+```
+
+The last node remains unchanged.
+
+---
+
+# ⏱ Time Complexity
+
+```text
+O(n)
+```
+
+Each node is visited only once.
+
+---
+
+# 💾 Space Complexity
+
+```text
+O(1)
+```
+
+Only a few pointer variables are used.
+
+---
+
+# 📊 Complexity Summary
+
+| Operation        | Complexity |
+| ---------------- | ---------- |
+| Time Complexity  | **O(n)**   |
+| Space Complexity | **O(1)**   |
+
+---
+
+# 📌 Interview Tip
+
+Whenever you hear questions like:
+
+* Swap adjacent nodes.
+* Swap pairs in a linked list.
+* Rearrange nodes without changing values.
+* Swap nodes in-place.
+
+Think about:
+
+* **Dummy Node**
+* **Three Pointer Technique**
+* **Pointer Rewiring**
+
+This is one of the most frequently asked Linked List interview patterns because it tests your ability to manipulate pointers safely.
+
+---
+
+# 🎓 Key Takeaways
+
+* Never swap node values unless explicitly allowed.
+* Rearrange **nodes**, not data.
+* A dummy node simplifies handling swaps involving the head.
+* Save references before changing `next` pointers.
+* Process one pair at a time.
+* The solution runs in **O(n)** time and **O(1)** extra space.
+* This problem strengthens your understanding of pointer manipulation and in-place linked list modifications.
+
+---
+
 
 
 
