@@ -1718,4 +1718,460 @@ It is the most efficient solution and avoids unnecessary calculations using powe
 * The algorithm runs in **O(n)** time with **O(1)** extra space.
 
 ---
+# 🚀 MyCoding - Data Structures & Algorithms in Java
+
+# 🧠 Strategy 6: Partition List
+
+> ⚠️ **Advanced Interview Question**
+
+This is one of the more challenging Linked List interview problems. Unlike previous questions, this problem requires careful manipulation of node pointers while preserving the original order of nodes.
+
+A good approach is to draw the linked list on paper and trace each pointer movement before implementing the solution.
+
+---
+
+# 📖 Problem Statement
+
+You are given a singly linked list **without a tail pointer** and an integer **x**.
+
+Rearrange the linked list so that:
+
+* All nodes with values **less than x** appear before nodes with values **greater than or equal to x**.
+* The **relative order** of nodes in both partitions remains unchanged.
+* The linked list must be modified **in-place**.
+
+---
+
+# 📌 Method Signature
+
+```java
+public void partitionList(int x)
+```
+
+---
+
+# 🎯 Constraints
+
+* Traverse the linked list at most **once**.
+* Do not create a new linked list.
+* Do not modify node values.
+* Only change the **next** pointers.
+* Preserve the relative order of nodes.
+
+---
+
+# 💡 Example 1
+
+Input
+
+```text
+Linked List
+
+3 → 8 → 5 → 10 → 2 → 1
+
+x = 5
+```
+
+Partition
+
+```text
+Less than 5
+
+3 → 2 → 1
+```
+
+```text
+Greater than or Equal to 5
+
+8 → 5 → 10
+```
+
+Output
+
+```text
+3 → 2 → 1 → 8 → 5 → 10
+```
+
+---
+
+# 💡 Example 2
+
+Input
+
+```text
+Linked List
+
+1 → 4 → 3 → 2 → 5 → 2
+
+x = 3
+```
+
+Partition
+
+```text
+Less than 3
+
+1 → 2 → 2
+```
+
+```text
+Greater than or Equal to 3
+
+4 → 3 → 5
+```
+
+Output
+
+```text
+1 → 2 → 2 → 4 → 3 → 5
+```
+
+---
+
+# ❓ Why Not Just Swap Values?
+
+Many beginners think of swapping node values.
+
+Example
+
+```text
+3 → 8 → 5 → 10 → 2 → 1
+```
+
+Swap values
+
+```text
+3 → 2 → 1 → 10 → 8 → 5
+```
+
+This is **incorrect** because:
+
+* The problem explicitly states **do not modify node values**.
+* The relative order must remain unchanged.
+
+Correct order
+
+```text
+8 → 5 → 10
+```
+
+Incorrect after swapping
+
+```text
+10 → 8 → 5
+```
+
+Therefore, we must move **nodes**, not values.
+
+---
+
+# 💡 Recommended Approach
+
+The easiest solution is to build **two separate chains** while traversing the list.
+
+* One chain for values **less than x**.
+* Another chain for values **greater than or equal to x**.
+
+Finally, connect both chains.
+
+---
+
+# 🖼 Visualization
+
+Original List
+
+```text
+3 → 8 → 5 → 10 → 2 → 1
+```
+
+Create Two Chains
+
+Less List
+
+```text
+3 → 2 → 1
+```
+
+Greater List
+
+```text
+8 → 5 → 10
+```
+
+Connect Them
+
+```text
+3 → 2 → 1 → 8 → 5 → 10
+```
+
+Done!
+
+---
+
+# ❓ Why Use Dummy Nodes?
+
+Without dummy nodes, inserting the very first node into each partition requires special handling.
+
+Dummy nodes eliminate these edge cases by always giving us a valid starting point.
+
+Initially
+
+```text
+lessDummy → null
+
+greaterDummy → null
+```
+
+As nodes are processed
+
+```text
+lessDummy → 3 → 2 → 1
+
+greaterDummy → 8 → 5 → 10
+```
+
+Finally
+
+```text
+3 → 2 → 1 → 8 → 5 → 10
+```
+
+Dummy nodes themselves are discarded.
+
+---
+
+# 💻 Java Solution
+
+```java
+public void partitionList(int x) {
+
+    if (head == null) {
+        return;
+    }
+
+    Node dummy1 = new Node(0);
+    Node dummy2 = new Node(0);
+
+    Node prev1 = dummy1;
+    Node prev2 = dummy2;
+    Node current = head;
+
+    while (current != null) {
+
+        if (current.value < x) {
+            prev1.next = current;
+            prev1 = current;
+        } else {
+            prev2.next = current;
+            prev2 = current;
+        }
+
+        current = current.next;
+    }
+
+    prev2.next = null;
+    prev1.next = dummy2.next;
+
+    head = dummy1.next;
+}
+```
+
+---
+
+# ⚙️ Algorithm
+
+1. If the list is empty, return.
+2. Create two dummy nodes.
+3. Traverse the linked list once.
+4. If the current value is less than `x`, attach it to the first list.
+5. Otherwise, attach it to the second list.
+6. Terminate the second list.
+7. Connect the first list with the second list.
+8. Update the head.
+
+---
+
+# 📊 Dry Run
+
+Input
+
+```text
+3 → 8 → 5 → 10 → 2 → 1
+
+x = 5
+```
+
+After processing
+
+Less List
+
+```text
+3 → 2 → 1
+```
+
+Greater List
+
+```text
+8 → 5 → 10
+```
+
+Merge
+
+```text
+3 → 2 → 1 → 8 → 5 → 10
+```
+
+Return
+
+```text
+Updated Linked List
+```
+
+---
+
+# ⚠️ Edge Cases
+
+### Empty List
+
+```text
+Head → null
+```
+
+Output
+
+```text
+null
+```
+
+---
+
+### All Nodes Less Than x
+
+Input
+
+```text
+1 → 2 → 3
+
+x = 5
+```
+
+Output
+
+```text
+1 → 2 → 3
+```
+
+---
+
+### All Nodes Greater Than or Equal to x
+
+Input
+
+```text
+8 → 9 → 10
+
+x = 5
+```
+
+Output
+
+```text
+8 → 9 → 10
+```
+
+---
+
+### Duplicate Values
+
+Input
+
+```text
+2 → 5 → 2 → 5 → 1
+```
+
+Output
+
+```text
+2 → 2 → 1 → 5 → 5
+```
+
+Relative order is preserved.
+
+---
+
+### x Not Present
+
+Input
+
+```text
+1 → 7 → 4 → 8
+
+x = 5
+```
+
+Output
+
+```text
+1 → 4 → 7 → 8
+```
+
+---
+
+# ⏱ Time Complexity
+
+```text
+O(n)
+```
+
+Each node is visited exactly once.
+
+---
+
+# 💾 Space Complexity
+
+```text
+O(1)
+```
+
+Only a few pointer variables are used. The dummy nodes are constant extra space and do not depend on the size of the input.
+
+---
+
+# 📊 Complexity Summary
+
+| Operation        | Complexity |
+| ---------------- | ---------- |
+| Time Complexity  | **O(n)**   |
+| Space Complexity | **O(1)**   |
+
+---
+
+# 📌 Interview Tip
+
+Whenever you hear questions like:
+
+* Partition a Linked List.
+* Separate nodes based on a pivot.
+* Rearrange nodes without changing values.
+* Preserve the relative order.
+* Solve in one traversal.
+
+Think about maintaining **two linked lists (or chains)** using **dummy nodes**, then joining them at the end.
+
+This pattern appears in several Linked List interview problems.
+
+---
+
+# 🎓 Key Takeaways
+
+* Never swap node values unless the problem explicitly allows it.
+* Rearrange **nodes**, not data.
+* Dummy nodes simplify pointer manipulation.
+* Build two separate chains while traversing.
+* Connect the chains after traversal.
+* Preserve the original order within each partition.
+* This is a classic Linked List interview problem that demonstrates pointer manipulation and in-place list reordering.
+
+---
+
 
