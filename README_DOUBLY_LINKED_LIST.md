@@ -1257,3 +1257,365 @@ Because the **head** pointer already points to the first node. We simply:
 3. Update the head pointer.
 
 No traversal is required, making the operation run in **constant time (O(1))**.
+-----------------------------
+
+# ➖ removeFirst()
+
+The **`removeFirst()`** method removes the **first node (head)** from the Doubly Linked List and returns the removed node.
+
+Unlike a Singly Linked List, we must update **both the `head` pointer** and the **`prev` pointer** of the new head to maintain the bidirectional links.
+
+---
+
+## 💻 Java Solution
+
+```java
+public Node removeFirst() {
+    if(length == 0) return null;
+
+    Node temp = head;
+
+    if(length == 1) {
+        head = null;
+        tail = null;
+    } else {
+        head = head.next;
+        head.prev = null;
+        temp.next = null;
+    }
+
+    length--;
+
+    return temp;
+}
+```
+
+---
+
+# 📖 Code Explanation
+
+### Step 1: Check if the List is Empty
+
+```java
+if(length == 0)
+    return null;
+```
+
+Checks whether the linked list is empty.
+
+If there are no nodes, there is nothing to remove, so return `null`.
+
+---
+
+### Step 2: Store the Current Head
+
+```java
+Node temp = head;
+```
+
+Store the current head in a temporary variable.
+
+This allows us to:
+
+* Return the removed node.
+* Safely move the head pointer without losing the original first node.
+
+Example
+
+```text
+Head
+
+↓
+
+null ← 10 ⇄ 20 ⇄ 30 → null
+
+                   ↑
+                 Tail
+
+temp
+ ↓
+10
+```
+
+---
+
+### Step 3: Check if There is Only One Node
+
+```java
+if(length == 1)
+```
+
+If the linked list contains only one node, removing it makes the list empty.
+
+```java
+head = null;
+tail = null;
+```
+
+Result
+
+```text
+Head = null
+
+Tail = null
+```
+
+---
+
+### Step 4: Move Head to the Next Node
+
+```java
+head = head.next;
+```
+
+Move the head pointer to the second node.
+
+Before
+
+```text
+Head
+
+↓
+
+10 ⇄ 20 ⇄ 30
+```
+
+After
+
+```text
+Head
+
+↓
+
+20 ⇄ 30
+```
+
+The new head is now **20**.
+
+---
+
+### Step 5: Remove the Backward Link
+
+```java
+head.prev = null;
+```
+
+The first node in a Doubly Linked List should never have a previous node.
+
+This line removes the backward connection from the new head to the old head.
+
+Before
+
+```text
+null ← 10 ⇄ 20
+           ↑
+         prev
+```
+
+After
+
+```text
+20.prev = null
+```
+
+Now **20** becomes the first node.
+
+---
+
+### Step 6: Remove the Forward Link
+
+```java
+temp.next = null;
+```
+
+Disconnect the removed node from the linked list.
+
+Before
+
+```text
+10 ⇄ 20
+```
+
+After
+
+```text
+10 → null
+
+20
+```
+
+The removed node is now completely isolated.
+
+---
+
+### Step 7: Decrease the Length
+
+```java
+length--;
+```
+
+Reduce the total number of nodes by one.
+
+---
+
+### Step 8: Return the Removed Node
+
+```java
+return temp;
+```
+
+Return the node that was removed from the beginning of the linked list.
+
+---
+
+# 🖼 Complete Example
+
+Initial List
+
+```text
+Head
+
+↓
+
+null ← 10 ⇄ 20 ⇄ 30 → null
+
+                   ↑
+                 Tail
+```
+
+Call
+
+```java
+removeFirst();
+```
+
+Execution
+
+### Store Head
+
+```text
+temp → 10
+```
+
+↓
+
+### Move Head
+
+```text
+Head → 20
+```
+
+↓
+
+### Remove Backward Link
+
+```text
+20.prev = null
+```
+
+↓
+
+### Remove Forward Link
+
+```text
+10.next = null
+```
+
+Final List
+
+```text
+Head
+
+↓
+
+null ← 20 ⇄ 30 → null
+
+              ↑
+            Tail
+```
+
+Returned Node
+
+```text
+null ← 10 → null
+```
+
+---
+
+# ❓ Why Do We Store `temp = head`?
+
+After moving the head pointer, we would lose access to the original first node.
+
+Using `temp` allows us to:
+
+* Return the removed node.
+* Disconnect it safely.
+
+---
+
+# ❓ Why Do We Move `head = head.next`?
+
+The second node becomes the new first node after removing the old head.
+
+---
+
+# ❓ Why Do We Set `head.prev = null`?
+
+The head node should never have a previous node.
+
+Without this line, the new head would still point back to the removed node, leaving an incorrect backward connection.
+
+---
+
+# ❓ Why Do We Set `temp.next = null`?
+
+This completely detaches the removed node from the linked list.
+
+The returned node becomes an independent node.
+
+---
+
+# ⏱ Time Complexity
+
+```text
+Time Complexity : O(1)
+```
+
+The head pointer gives direct access to the first node, so no traversal is required.
+
+---
+
+# 💾 Space Complexity
+
+```text
+Space Complexity : O(1)
+```
+
+Only one temporary pointer is used.
+
+---
+
+# 🎓 Key Takeaways
+
+* If the list is empty, return `null`.
+* Store the current head before updating it.
+* If only one node exists, make both `head` and `tail` `null`.
+* Otherwise, move the head to the next node.
+* Remove the new head's `prev` pointer.
+* Disconnect the removed node by setting its `next` pointer to `null`.
+* Decrease the length.
+* Return the removed node.
+* Updating both `head` and `prev` ensures the Doubly Linked List remains correctly connected.
+
+---
+
+## 📌 Interview Tip
+
+**Question:** Why do we need both `head.prev = null` and `temp.next = null`?
+
+**Answer:**
+
+* `head.prev = null` updates the new head so it no longer points to the removed node.
+* `temp.next = null` completely detaches the removed node from the linked list.
+
+Both steps ensure the removed node is fully disconnected and the remaining linked list maintains valid forward and backward links.
