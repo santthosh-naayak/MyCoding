@@ -12,5 +12,11 @@ public class Main {
         System.out.println(myDLL.removeLast().value);
         System.out.println(myDLL.removeLast().value);
         System.out.println(myDLL.removeLast());
+        myDLL.append(1);
+        myDLL.append(2);
+        System.out.println("New DLL");
+        myDLL.printList();
+        myDLL.prepend(0);
+        myDLL.printList();
     }
 }

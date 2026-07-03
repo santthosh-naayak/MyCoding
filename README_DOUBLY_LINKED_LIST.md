@@ -942,3 +942,318 @@ Only one temporary pointer is used.
 * In a **Doubly Linked List**, the tail already knows its previous node through the `prev` pointer, so the tail can move backward directly without any traversal.
 
 This is one of the biggest advantages of using a Doubly Linked List over a Singly Linked List.
+------------------
+
+# ⬅ prepend()
+
+The **`prepend()`** method adds a new node to the **beginning** of the Doubly Linked List.
+
+Unlike a Singly Linked List, we must update **both the `next` and `prev` pointers** to maintain the bidirectional links between nodes.
+
+---
+
+## 💻 Java Solution
+
+```java
+public void prepend(int value) {
+    Node newNode = new Node(value);
+
+    if(length == 0) {
+        head = newNode;
+        tail = newNode;
+    } else {
+        newNode.next = head;
+        head.prev = newNode;
+        head = newNode;
+    }
+
+    length++;
+}
+```
+
+---
+
+# 📖 Code Explanation
+
+### Step 1: Create a New Node
+
+```java
+Node newNode = new Node(value);
+```
+
+Creates a new node with the given value.
+
+Initially, the new node has no connections.
+
+```text
+null ← newNode → null
+```
+
+---
+
+### Step 2: Check if the List is Empty
+
+```java
+if(length == 0)
+```
+
+Checks whether the Doubly Linked List is empty.
+
+If it is, the new node becomes both the **head** and the **tail**.
+
+```java
+head = newNode;
+tail = newNode;
+```
+
+Result
+
+```text
+Head
+ ↓
+
+null ← 10 → null
+
+ ↑
+Tail
+```
+
+Since there is only one node, both `next` and `prev` are `null`.
+
+---
+
+### Step 3: Point the New Node to the Current Head
+
+```java
+newNode.next = head;
+```
+
+Connects the new node to the existing head.
+
+Before
+
+```text
+Head
+
+↓
+
+null ← 10 ⇄ 20 ⇄ 30 → null
+```
+
+After
+
+```text
+newNode → 10 ⇄ 20 ⇄ 30
+```
+
+At this stage, only the forward connection has been created.
+
+---
+
+### Step 4: Point the Current Head Back to the New Node
+
+```java
+head.prev = newNode;
+```
+
+Creates the backward connection.
+
+Before
+
+```text
+newNode → 10
+```
+
+After
+
+```text
+newNode ⇄ 10
+```
+
+Now both nodes are connected in both directions.
+
+---
+
+### Step 5: Move the Head Pointer
+
+```java
+head = newNode;
+```
+
+Updates the head so it points to the newly inserted node.
+
+Before
+
+```text
+Head
+
+↓
+
+10
+```
+
+After
+
+```text
+Head
+
+↓
+
+5
+```
+
+The new node is now the first node of the linked list.
+
+---
+
+### Step 6: Increase the Length
+
+```java
+length++;
+```
+
+Increments the total number of nodes in the linked list.
+
+---
+
+# 🖼 Complete Example
+
+Initial List
+
+```text
+Head
+
+↓
+
+null ← 10 ⇄ 20 ⇄ 30 → null
+
+                   ↑
+                 Tail
+```
+
+Call
+
+```java
+prepend(5);
+```
+
+Execution
+
+### Create a New Node
+
+```text
+null ← 5 → null
+```
+
+↓
+
+### Connect New Node to Current Head
+
+```text
+5 → 10
+```
+
+↓
+
+### Connect Current Head Back to New Node
+
+```text
+5 ⇄ 10
+```
+
+↓
+
+### Move Head
+
+```text
+Head
+
+↓
+
+5
+```
+
+Final List
+
+```text
+Head
+
+↓
+
+null ← 5 ⇄ 10 ⇄ 20 ⇄ 30 → null
+
+                        ↑
+                      Tail
+```
+
+---
+
+# ❓ Why Do We Need `newNode.next = head`?
+
+Without this line, the new node would never connect to the existing linked list.
+
+It would remain an isolated node.
+
+---
+
+# ❓ Why Do We Need `head.prev = newNode`?
+
+This creates the backward connection.
+
+Without it, you could move from **5 → 10**, but you couldn't move back from **10 → 5**, breaking backward traversal.
+
+---
+
+# ❓ Why Do We Need `head = newNode`?
+
+The head should always point to the first node.
+
+If we don't update it, the linked list will still think the old first node is the head.
+
+---
+
+# ⏱ Time Complexity
+
+```text
+Time Complexity : O(1)
+```
+
+The node is inserted at the beginning without traversing the linked list.
+
+---
+
+# 💾 Space Complexity
+
+```text
+Space Complexity : O(1)
+```
+
+Only one new node is created.
+
+---
+
+# 🎓 Key Takeaways
+
+* Create a new node.
+* If the list is empty, make it both the head and the tail.
+* Otherwise, connect the new node to the current head.
+* Connect the current head back to the new node.
+* Move the head pointer to the new node.
+* Increase the length.
+* Both the `next` and `prev` pointers must be updated to maintain the Doubly Linked List.
+
+---
+
+## 📌 Interview Tip
+
+**Question:** Why is `prepend()` **O(1)** in a Doubly Linked List?
+
+**Answer:**
+
+Because the **head** pointer already points to the first node. We simply:
+
+1. Connect the new node to the current head.
+2. Connect the current head back to the new node.
+3. Update the head pointer.
+
+No traversal is required, making the operation run in **constant time (O(1))**.
