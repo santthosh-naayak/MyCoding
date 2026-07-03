@@ -7,5 +7,7 @@ public class Main {
         System.out.println("Tail: " + myDLL.getTail().value);
         System.out.println("Length: " + myDLL.getLength());
         myDLL.printList();
+        myDLL.append(2);
+        myDLL.printList();
     }
 }
