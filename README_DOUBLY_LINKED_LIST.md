@@ -580,3 +580,365 @@ Only one new node is created regardless of the size of the linked list.
 This is one of the fundamental differences between the two data structures and is a common interview question.
 
 --------------------------------
+# ➖ removeLast()
+
+The **`removeLast()`** method removes the **last node (tail)** from the Doubly Linked List and returns the removed node.
+
+Unlike a Singly Linked List, a Doubly Linked List can remove the last node in **O(1)** time because each node has a **previous (`prev`) pointer**, allowing direct access to the second-last node.
+
+---
+
+## 💻 Java Solution
+
+```java
+public Node removeLast() {
+    if (length == 0)
+        return null;
+
+    Node temp = tail;
+
+    if (length == 1) {
+        head = null;
+        tail = null;
+    } else {
+        tail = tail.prev;
+        tail.next = null;
+        temp.prev = null;
+    }
+
+    length--;
+
+    return temp;
+}
+```
+
+---
+
+# 📖 Code Explanation
+
+### Step 1: Check if the List is Empty
+
+```java
+if (length == 0)
+    return null;
+```
+
+If the linked list is empty, there is no node to remove, so return `null`.
+
+---
+
+### Step 2: Store the Current Tail
+
+```java
+Node temp = tail;
+```
+
+Store the current tail in a temporary variable.
+
+This allows us to:
+
+* Return the removed node.
+* Safely update the `tail` pointer without losing the last node.
+
+Example
+
+```text
+Head
+
+↓
+
+null ← 10 ⇄ 20 ⇄ 30 → null
+
+                   ↑
+                 Tail
+                  ↑
+                 temp
+```
+
+---
+
+### Step 3: Check if There is Only One Node
+
+```java
+if (length == 1)
+```
+
+If the list contains only one node, removing it makes the linked list empty.
+
+```java
+head = null;
+tail = null;
+```
+
+Result
+
+```text
+Head = null
+
+Tail = null
+```
+
+---
+
+### Step 4: Move Tail to the Previous Node
+
+```java
+tail = tail.prev;
+```
+
+Move the tail pointer one step backward.
+
+Before
+
+```text
+Head
+
+↓
+
+10 ⇄ 20 ⇄ 30
+
+             ↑
+           Tail
+```
+
+After
+
+```text
+Head
+
+↓
+
+10 ⇄ 20 ⇄ 30
+
+        ↑
+      Tail
+```
+
+The new tail is now **20**.
+
+---
+
+### Step 5: Remove the Forward Link
+
+```java
+tail.next = null;
+```
+
+Disconnect the new tail from the removed node.
+
+Before
+
+```text
+20 ⇄ 30
+```
+
+After
+
+```text
+20 → null
+
+30
+```
+
+Now **20** becomes the last node.
+
+---
+
+### Step 6: Remove the Backward Link
+
+```java
+temp.prev = null;
+```
+
+Disconnect the removed node from the linked list.
+
+Before
+
+```text
+20 ⇄ 30
+```
+
+After
+
+```text
+20 → null
+
+null ← 30
+```
+
+Now the removed node is completely isolated.
+
+---
+
+### Step 7: Decrease the Length
+
+```java
+length--;
+```
+
+Reduce the total number of nodes by one.
+
+---
+
+### Step 8: Return the Removed Node
+
+```java
+return temp;
+```
+
+Return the node that was removed from the linked list.
+
+---
+
+# 🖼 Complete Example
+
+Initial List
+
+```text
+Head
+
+↓
+
+null ← 10 ⇄ 20 ⇄ 30 → null
+
+                   ↑
+                 Tail
+```
+
+Call
+
+```java
+removeLast();
+```
+
+Execution
+
+### Store Tail
+
+```text
+temp → 30
+```
+
+↓
+
+### Move Tail Backward
+
+```text
+Tail → 20
+```
+
+↓
+
+### Remove Forward Link
+
+```text
+20.next = null
+```
+
+↓
+
+### Remove Backward Link
+
+```text
+30.prev = null
+```
+
+Final List
+
+```text
+Head
+
+↓
+
+null ← 10 ⇄ 20 → null
+
+              ↑
+            Tail
+```
+
+Returned Node
+
+```text
+null ← 30 → null
+```
+
+---
+
+# ❓ Why Do We Store `temp = tail`?
+
+After moving the tail pointer, we would lose the reference to the original last node.
+
+Using `temp` allows us to:
+
+* Return the removed node.
+* Disconnect it safely.
+
+---
+
+# ❓ Why Do We Move `tail = tail.prev`?
+
+Since every node knows its previous node, we can directly move the tail to the second-last node.
+
+This is why removing the last node in a Doubly Linked List is much faster than in a Singly Linked List.
+
+---
+
+# ❓ Why Do We Set `tail.next = null`?
+
+The new tail should always point to `null`.
+
+Otherwise, it would still reference the removed node, leaving the list incorrectly connected.
+
+---
+
+# ❓ Why Do We Set `temp.prev = null`?
+
+This completely detaches the removed node from the linked list.
+
+The returned node becomes an independent node with no connection to the original list.
+
+---
+
+# ⏱ Time Complexity
+
+```text
+Time Complexity : O(1)
+```
+
+Since we already maintain a **tail pointer** and every node has a **prev** pointer, no traversal is required.
+
+---
+
+# 💾 Space Complexity
+
+```text
+Space Complexity : O(1)
+```
+
+Only one temporary pointer is used.
+
+---
+
+# 🎓 Key Takeaways
+
+* If the list is empty, return `null`.
+* Store the current tail before updating it.
+* If only one node exists, make both `head` and `tail` `null`.
+* Otherwise, move the tail to the previous node.
+* Remove both forward and backward links.
+* Decrease the length.
+* Return the removed node.
+* The `prev` pointer allows removing the last node in **constant time**, which is a major advantage of a Doubly Linked List.
+
+---
+
+## 📌 Interview Tip
+
+**Question:** Why is `removeLast()` **O(1)** in a Doubly Linked List but **O(n)** in a Singly Linked List?
+
+**Answer:**
+
+* In a **Singly Linked List**, you must traverse from the head to find the second-last node because nodes only know their `next` node.
+* In a **Doubly Linked List**, the tail already knows its previous node through the `prev` pointer, so the tail can move backward directly without any traversal.
+
+This is one of the biggest advantages of using a Doubly Linked List over a Singly Linked List.

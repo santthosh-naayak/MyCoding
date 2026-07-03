@@ -9,5 +9,8 @@ public class Main {
         myDLL.printList();
         myDLL.append(2);
         myDLL.printList();
+        System.out.println(myDLL.removeLast().value);
+        System.out.println(myDLL.removeLast().value);
+        System.out.println(myDLL.removeLast());
     }
 }
