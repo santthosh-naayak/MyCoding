@@ -38,5 +38,15 @@ public class Main {
         System.out.println("insert");
         myDLL.insert(1, 5);
         myDLL.printList();
+        System.out.println("Remove Node at last");
+        myDLL.remove(4);
+        myDLL.printList();
+        System.out.println("Remove at first");
+        myDLL.remove(0);
+        myDLL.printList();
+        System.out.println("removing at index");
+        System.out.println(myDLL.remove(1).value);
+        System.out.println("Printing the list");
+        myDLL.printList();
     }
 }

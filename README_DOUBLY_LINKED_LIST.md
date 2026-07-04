@@ -3551,3 +3551,839 @@ Then:
 Connect Neighbors → New Node
 ```
 ----------------------------------------------------------------
+# ❌ remove(index)
+
+The **`remove()`** method removes a node from a specific index in the Doubly Linked List and returns the removed node.
+
+Depending on the index:
+
+* If the index is `0`, use `removeFirst()`.
+* If the index is `length - 1`, use `removeLast()`.
+* Otherwise, remove the node from the middle by updating the `next` and `prev` pointers.
+
+---
+
+## 💻 Java Solution
+
+```java
+public Node remove(int index) {
+    if(index < 0 || index >= length) return null;
+
+    if(index == 0) return removeFirst();
+
+    if(index == length - 1) return removeLast();
+
+    Node temp = get(index);
+
+    temp.next.prev = temp.prev;
+    temp.prev.next = temp.next;
+
+    temp.next = null;
+    temp.prev = null;
+
+    length--;
+
+    return temp;
+}
+```
+
+---
+
+# 📖 Code Explanation
+
+### Step 1: Check if the Index is Valid
+
+```java
+if(index < 0 || index >= length) return null;
+```
+
+Checks whether the requested index exists in the Doubly Linked List.
+
+For example:
+
+```text
+10 ⇄ 20 ⇄ 30 ⇄ 40
+
+length = 4
+```
+
+Valid indexes are:
+
+```text
+0, 1, 2, 3
+```
+
+Invalid indexes include:
+
+```text
+-1, 4, 5...
+```
+
+If the index is invalid, return `null`.
+
+---
+
+### Step 2: Check if Removing the First Node
+
+```java
+if(index == 0) return removeFirst();
+```
+
+If the index is `0`, the first node needs to be removed.
+
+Instead of writing the removal logic again, reuse the existing `removeFirst()` method.
+
+Example:
+
+```text
+10 ⇄ 20 ⇄ 30
+```
+
+Call:
+
+```java
+remove(0);
+```
+
+The method executes:
+
+```java
+removeFirst();
+```
+
+Result:
+
+```text
+20 ⇄ 30
+```
+
+Removed Node:
+
+```text
+10
+```
+
+---
+
+### Step 3: Check if Removing the Last Node
+
+```java
+if(index == length - 1) return removeLast();
+```
+
+If the index is the last index, use the existing `removeLast()` method.
+
+Example:
+
+```text
+10 ⇄ 20 ⇄ 30
+
+length = 3
+```
+
+The last index is:
+
+```text
+length - 1
+
+3 - 1 = 2
+```
+
+Call:
+
+```java
+remove(2);
+```
+
+The method executes:
+
+```java
+removeLast();
+```
+
+Result:
+
+```text
+10 ⇄ 20
+```
+
+Removed Node:
+
+```text
+30
+```
+
+---
+
+# 🔗 Removing a Node from the Middle
+
+If the index is neither `0` nor `length - 1`, the node must be removed from the middle.
+
+Example:
+
+```text
+Index
+
+ 0      1      2      3
+
+10  ⇄  20  ⇄  30  ⇄  40
+```
+
+Call:
+
+```java
+remove(2);
+```
+
+We need to remove:
+
+```text
+30
+```
+
+Expected Result:
+
+```text
+10 ⇄ 20 ⇄ 40
+```
+
+---
+
+### Step 4: Get the Node to Remove
+
+```java
+Node temp = get(index);
+```
+
+Uses the existing `get()` method to find the node at the requested index.
+
+Example:
+
+```java
+remove(2);
+```
+
+The method calls:
+
+```java
+get(2);
+```
+
+Result:
+
+```text
+temp → 30
+```
+
+Now:
+
+```text
+temp.prev → 20
+
+temp      → 30
+
+temp.next → 40
+```
+
+Visualization:
+
+```text
+temp.prev       temp       temp.next
+
+    20     ⇄     30     ⇄     40
+```
+
+---
+
+# 🔥 Updating the Pointers
+
+This is the most important part of the `remove()` method.
+
+Before:
+
+```text
+20 ⇄ 30 ⇄ 40
+```
+
+We want to remove:
+
+```text
+30
+```
+
+After:
+
+```text
+20 ⇄ 40
+```
+
+Therefore, the nodes before and after `temp` must be connected directly.
+
+---
+
+### Step 5: Connect the Next Node Back to the Previous Node
+
+```java
+temp.next.prev = temp.prev;
+```
+
+Let's break this line down.
+
+We know:
+
+```text
+temp → 30
+```
+
+Therefore:
+
+```text
+temp.next → 40
+```
+
+And:
+
+```text
+temp.prev → 20
+```
+
+So:
+
+```java
+temp.next.prev = temp.prev;
+```
+
+means:
+
+```text
+40.prev = 20
+```
+
+Before:
+
+```text
+40.prev → 30
+```
+
+After:
+
+```text
+40.prev → 20
+```
+
+Visualization:
+
+```text
+20 ← 40
+```
+
+This fixes the **backward connection**.
+
+---
+
+### Step 6: Connect the Previous Node Forward to the Next Node
+
+```java
+temp.prev.next = temp.next;
+```
+
+Again:
+
+```text
+temp.prev → 20
+
+temp.next → 40
+```
+
+Therefore:
+
+```java
+temp.prev.next = temp.next;
+```
+
+means:
+
+```text
+20.next = 40
+```
+
+Before:
+
+```text
+20.next → 30
+```
+
+After:
+
+```text
+20.next → 40
+```
+
+Visualization:
+
+```text
+20 → 40
+```
+
+This fixes the **forward connection**.
+
+---
+
+# 🖼 After Updating Both Connections
+
+Before:
+
+```text
+20 ⇄ 30 ⇄ 40
+```
+
+After:
+
+```text
+20 ⇄ 40
+```
+
+But the removed node `30` still has its own pointers:
+
+```text
+30.prev → 20
+
+30.next → 40
+```
+
+Therefore, we still need to disconnect it completely.
+
+---
+
+### Step 7: Remove the Forward Connection from the Removed Node
+
+```java
+temp.next = null;
+```
+
+Disconnects the removed node from the next node.
+
+Before:
+
+```text
+30.next → 40
+```
+
+After:
+
+```text
+30.next → null
+```
+
+---
+
+### Step 8: Remove the Backward Connection from the Removed Node
+
+```java
+temp.prev = null;
+```
+
+Disconnects the removed node from the previous node.
+
+Before:
+
+```text
+30.prev → 20
+```
+
+After:
+
+```text
+30.prev → null
+```
+
+Now the removed node is completely isolated.
+
+```text
+null ← 30 → null
+```
+
+---
+
+### Step 9: Decrease the Length
+
+```java
+length--;
+```
+
+A node has been removed, so decrease the total number of nodes by one.
+
+---
+
+### Step 10: Return the Removed Node
+
+```java
+return temp;
+```
+
+Returns the node that was removed from the Doubly Linked List.
+
+---
+
+# 🖼 Complete Example
+
+Initial List:
+
+```text
+Index
+
+ 0      1      2      3
+
+10  ⇄  20  ⇄  30  ⇄  40
+```
+
+Call:
+
+```java
+remove(2);
+```
+
+---
+
+### Get the Node
+
+```java
+Node temp = get(2);
+```
+
+Result:
+
+```text
+temp → 30
+```
+
+Current Situation:
+
+```text
+temp.prev       temp       temp.next
+
+    20     ⇄     30     ⇄     40
+```
+
+---
+
+### Fix the Backward Connection
+
+```java
+temp.next.prev = temp.prev;
+```
+
+Which means:
+
+```text
+40.prev = 20
+```
+
+---
+
+### Fix the Forward Connection
+
+```java
+temp.prev.next = temp.next;
+```
+
+Which means:
+
+```text
+20.next = 40
+```
+
+Now:
+
+```text
+20 ⇄ 40
+```
+
+---
+
+### Disconnect the Removed Node
+
+```java
+temp.next = null;
+temp.prev = null;
+```
+
+Removed Node:
+
+```text
+null ← 30 → null
+```
+
+---
+
+### Final List
+
+```text
+10 ⇄ 20 ⇄ 40
+```
+
+Returned Node:
+
+```text
+30
+```
+
+---
+
+# 🧠 Easy Way to Remember the Pointer Changes
+
+Suppose:
+
+```text
+Before ⇄ Temp ⇄ After
+```
+
+We want:
+
+```text
+Before ⇄ After
+```
+
+First, connect `After` backward to `Before`:
+
+```java
+temp.next.prev = temp.prev;
+```
+
+Then connect `Before` forward to `After`:
+
+```java
+temp.prev.next = temp.next;
+```
+
+Finally, disconnect `Temp`:
+
+```java
+temp.next = null;
+temp.prev = null;
+```
+
+So the pattern is:
+
+```text
+Connect Neighbors
+
+↓
+
+Disconnect Removed Node
+```
+
+---
+
+# ❓ Why Do We Use `get(index)`?
+
+```java
+Node temp = get(index);
+```
+
+We need to find the node that should be removed.
+
+Instead of writing the traversal logic again, we reuse the existing `get()` method.
+
+This makes the code:
+
+* Shorter
+* Cleaner
+* Easier to maintain
+* Avoids duplicate traversal logic
+
+---
+
+# ❓ Why Do We Use `temp.next.prev = temp.prev`?
+
+This changes the backward pointer of the node after `temp`.
+
+Example:
+
+```text
+20 ⇄ 30 ⇄ 40
+```
+
+If `temp` is `30`:
+
+```text
+temp.next = 40
+
+temp.prev = 20
+```
+
+Therefore:
+
+```java
+temp.next.prev = temp.prev;
+```
+
+means:
+
+```text
+40.prev = 20
+```
+
+---
+
+# ❓ Why Do We Use `temp.prev.next = temp.next`?
+
+This changes the forward pointer of the node before `temp`.
+
+If:
+
+```text
+temp.prev = 20
+
+temp.next = 40
+```
+
+Then:
+
+```java
+temp.prev.next = temp.next;
+```
+
+means:
+
+```text
+20.next = 40
+```
+
+---
+
+# ❓ Why Do We Set Both Pointers to `null`?
+
+```java
+temp.next = null;
+temp.prev = null;
+```
+
+Even after connecting the neighboring nodes, the removed node still contains references to the original list.
+
+Setting both pointers to `null` completely isolates the removed node.
+
+Before:
+
+```text
+20 ← 30 → 40
+```
+
+After:
+
+```text
+null ← 30 → null
+```
+
+---
+
+# ⏱ Time Complexity
+
+```text
+Time Complexity : O(n)
+```
+
+Removing the node itself requires only constant-time pointer updates:
+
+```text
+O(1)
+```
+
+However, the method first calls:
+
+```java
+get(index);
+```
+
+Finding the node may require traversal.
+
+Therefore, the overall worst-case time complexity is:
+
+```text
+O(n)
+```
+
+---
+
+# 💾 Space Complexity
+
+```text
+Space Complexity : O(1)
+```
+
+Only one temporary pointer is used.
+
+No additional data structures are created.
+
+---
+
+# 📊 Complexity Summary
+
+| Operation          | Complexity |
+| ------------------ | ---------- |
+| Remove First       | O(1)       |
+| Remove Last        | O(1)       |
+| Find Middle Node   | O(n)       |
+| Pointer Updates    | O(1)       |
+| Overall Worst Case | **O(n)**   |
+| Space Complexity   | **O(1)**   |
+
+---
+
+# 🎓 Key Takeaways
+
+* First, validate the index.
+* Use `removeFirst()` when removing index `0`.
+* Use `removeLast()` when removing index `length - 1`.
+* Use `get(index)` to find a middle node.
+* Connect the next node backward to the previous node.
+* Connect the previous node forward to the next node.
+* Disconnect both pointers of the removed node.
+* Decrease the length.
+* Return the removed node.
+* Removing a middle node requires updating both forward and backward connections.
+
+---
+
+## 📌 Interview Tip
+
+A common interview question is:
+
+**How do you remove a middle node from a Doubly Linked List?**
+
+The easiest way to remember is:
+
+```text
+Before ⇄ Temp ⇄ After
+
+↓
+
+Connect Before and After
+
+↓
+
+Before ⇄ After
+
+↓
+
+Disconnect Temp
+```
+
+The four important pointer operations are:
+
+```java
+temp.next.prev = temp.prev;
+temp.prev.next = temp.next;
+
+temp.next = null;
+temp.prev = null;
+```
+
+Remember it as:
+
+```text
+First: Connect the neighbors.
+
+Then: Disconnect the removed node.
+```
+---------------------------------
