@@ -21,5 +21,8 @@ public class Main {
         System.out.println("Removing First");
         myDLL.removeFirst();
         myDLL.printList();
+        System.out.println("Printing the node value at given index");
+        System.out.println(myDLL.get(0).value);
+        System.out.println(myDLL.get(1).value);
     }
 }

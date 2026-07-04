@@ -1619,3 +1619,647 @@ Only one temporary pointer is used.
 * `temp.next = null` completely detaches the removed node from the linked list.
 
 Both steps ensure the removed node is fully disconnected and the remaining linked list maintains valid forward and backward links.
+--------------------
+# 🎯 get(index)
+
+The **`get()`** method returns the node located at a specific index in the Doubly Linked List.
+
+Unlike a Singly Linked List, a Doubly Linked List can traverse in **both directions**.
+
+Therefore:
+
+* If the index is in the **first half**, start searching from the `head`.
+* If the index is in the **second half**, start searching from the `tail`.
+
+This reduces unnecessary traversal.
+
+---
+
+## 💻 Java Solution
+
+```java
+public Node get(int index) {
+    if (index < 0 || index >= length) return null;
+
+    Node temp = head;
+
+    if (index < length / 2) {
+        for (int i = 0; i < index; i++) {
+            temp = temp.next;
+        }
+    } else {
+        temp = tail;
+
+        for (int i = length - 1; i > index; i--) {
+            temp = temp.prev;
+        }
+    }
+
+    return temp;
+}
+```
+
+---
+
+# 📖 Code Explanation
+
+### Step 1: Check if the Index is Valid
+
+```java
+if (index < 0 || index >= length) return null;
+```
+
+Checks whether the requested index exists in the Doubly Linked List.
+
+An index is invalid when:
+
+```text
+index < 0
+```
+
+or
+
+```text
+index >= length
+```
+
+For example, suppose:
+
+```text
+10 ⇄ 20 ⇄ 30 ⇄ 40
+
+length = 4
+```
+
+Valid indexes are:
+
+```text
+0, 1, 2, 3
+```
+
+Invalid indexes include:
+
+```text
+-1, 4, 5, 6...
+```
+
+If the index is invalid, return `null`.
+
+---
+
+### Step 2: Create a Temporary Pointer
+
+```java
+Node temp = head;
+```
+
+Creates a temporary pointer used to traverse the Doubly Linked List.
+
+Initially:
+
+```text
+temp
+
+ ↓
+
+10 ⇄ 20 ⇄ 30 ⇄ 40
+```
+
+The `temp` pointer will move through the list until it reaches the requested index.
+
+---
+
+### Step 3: Check Which Side is Closer
+
+```java
+if (index < length / 2)
+```
+
+Checks whether the requested index is located in the first half or second half of the list.
+
+If the index is in the first half:
+
+```text
+Start from Head
+```
+
+Otherwise:
+
+```text
+Start from Tail
+```
+
+---
+
+# 🖼 Example
+
+Suppose we have:
+
+```text
+Index
+
+  0      1      2      3      4      5
+
+ 10  ⇄  20  ⇄  30  ⇄  40  ⇄  50  ⇄  60
+
+ ↑                                     ↑
+Head                                  Tail
+```
+
+Length:
+
+```text
+6
+```
+
+Half:
+
+```text
+length / 2
+
+6 / 2 = 3
+```
+
+Therefore:
+
+```text
+Index 0 → Start from Head
+
+Index 1 → Start from Head
+
+Index 2 → Start from Head
+
+Index 3 → Start from Tail
+
+Index 4 → Start from Tail
+
+Index 5 → Start from Tail
+```
+
+This avoids unnecessary traversal.
+
+---
+
+# ➡️ Case 1: Index is in the First Half
+
+```java
+if (index < length / 2)
+```
+
+If the requested index is closer to the head, traverse forward.
+
+```java
+for (int i = 0; i < index; i++) {
+    temp = temp.next;
+}
+```
+
+---
+
+## Example
+
+Suppose:
+
+```text
+10 ⇄ 20 ⇄ 30 ⇄ 40 ⇄ 50 ⇄ 60
+```
+
+Call:
+
+```java
+get(2);
+```
+
+Since:
+
+```text
+2 < 3
+```
+
+Start from the head.
+
+Initially:
+
+```text
+temp → 10
+```
+
+First Iteration:
+
+```text
+temp = temp.next;
+
+temp → 20
+```
+
+Second Iteration:
+
+```text
+temp = temp.next;
+
+temp → 30
+```
+
+Return:
+
+```text
+30
+```
+
+---
+
+# ⬅️ Case 2: Index is in the Second Half
+
+```java
+else
+```
+
+If the requested index is closer to the tail, start searching from the tail.
+
+First:
+
+```java
+temp = tail;
+```
+
+Now `temp` points to the last node.
+
+```text
+10 ⇄ 20 ⇄ 30 ⇄ 40 ⇄ 50 ⇄ 60
+
+                              ↑
+                             temp
+```
+
+---
+
+### Traverse Backward
+
+```java
+for (int i = length - 1; i > index; i--) {
+    temp = temp.prev;
+}
+```
+
+Move backward using the `prev` pointer until the requested index is reached.
+
+---
+
+## Example
+
+Suppose:
+
+```text
+10 ⇄ 20 ⇄ 30 ⇄ 40 ⇄ 50 ⇄ 60
+```
+
+Call:
+
+```java
+get(4);
+```
+
+Since:
+
+```text
+4 >= 3
+```
+
+Start from the tail.
+
+Initially:
+
+```text
+temp → 60
+```
+
+The tail is at index:
+
+```text
+length - 1
+
+6 - 1 = 5
+```
+
+First Iteration:
+
+```text
+i = 5
+```
+
+Since:
+
+```text
+5 > 4
+```
+
+Move backward:
+
+```java
+temp = temp.prev;
+```
+
+Now:
+
+```text
+temp → 50
+```
+
+`50` is at index `4`.
+
+The loop stops.
+
+Return:
+
+```text
+50
+```
+
+---
+
+# ❓ Why Use `length / 2`?
+
+```java
+if (index < length / 2)
+```
+
+This determines which end of the Doubly Linked List is closer to the requested index.
+
+For example:
+
+```text
+10 ⇄ 20 ⇄ 30 ⇄ 40 ⇄ 50 ⇄ 60
+```
+
+Suppose we want:
+
+```java
+get(5);
+```
+
+If we start from the head:
+
+```text
+10 → 20 → 30 → 40 → 50 → 60
+```
+
+We need **5 movements**.
+
+But if we start from the tail:
+
+```text
+60
+```
+
+We need **0 movements**.
+
+Therefore, starting from the nearest end makes the traversal more efficient.
+
+---
+
+# ❓ Why Do We Use `temp.next`?
+
+```java
+temp = temp.next;
+```
+
+When starting from the head, we need to move forward through the Doubly Linked List.
+
+The `next` pointer gives us access to the next node.
+
+```text
+10 → 20 → 30
+```
+
+---
+
+# ❓ Why Do We Use `temp.prev`?
+
+```java
+temp = temp.prev;
+```
+
+When starting from the tail, we need to move backward through the Doubly Linked List.
+
+The `prev` pointer gives us access to the previous node.
+
+```text
+30 ← 40 ← 50
+```
+
+---
+
+# ❓ Why Does the Backward Loop Start at `length - 1`?
+
+```java
+for (int i = length - 1; i > index; i--)
+```
+
+Because the tail is located at the last index.
+
+For a list with:
+
+```text
+length = 6
+```
+
+The indexes are:
+
+```text
+0  1  2  3  4  5
+```
+
+Therefore:
+
+```text
+tail index = length - 1
+
+tail index = 6 - 1
+
+tail index = 5
+```
+
+That's why the loop starts at:
+
+```java
+length - 1
+```
+
+---
+
+# ❓ Why Do We Use `i > index`?
+
+The loop should continue only until `temp` reaches the requested index.
+
+For example:
+
+```text
+length = 6
+
+index = 3
+```
+
+Start:
+
+```text
+i = 5
+```
+
+First Movement:
+
+```text
+i = 5
+
+5 > 3
+
+Move backward
+```
+
+Second Movement:
+
+```text
+i = 4
+
+4 > 3
+
+Move backward
+```
+
+Now `temp` has reached index `3`.
+
+The loop stops.
+
+---
+
+# 🖼 Complete Example
+
+Linked List:
+
+```text
+Index
+
+  0      1      2      3      4      5
+
+ 10  ⇄  20  ⇄  30  ⇄  40  ⇄  50  ⇄  60
+
+ ↑                                     ↑
+Head                                  Tail
+```
+
+---
+
+### `get(1)`
+
+```text
+1 < 3
+```
+
+Start from Head:
+
+```text
+10 → 20
+```
+
+Return:
+
+```text
+20
+```
+
+---
+
+### `get(4)`
+
+```text
+4 >= 3
+```
+
+Start from Tail:
+
+```text
+60 ← 50
+```
+
+Return:
+
+```text
+50
+```
+
+---
+
+### `get(6)`
+
+```text
+6 >= length
+```
+
+Return:
+
+```text
+null
+```
+
+---
+
+# ⏱ Time Complexity
+
+```text
+Time Complexity : O(n)
+```
+
+In Big O notation, the worst-case time complexity is still **O(n)**.
+
+However, because we start from the closest end, we traverse at most approximately half of the list:
+
+```text
+O(n / 2)
+```
+
+After dropping constants:
+
+```text
+O(n)
+```
+
+So the official Big O complexity remains:
+
+```text
+O(n)
+```
+
+---
+
+# 💾 Space Complexity
+
+```text
+Space Complexity : O(1)
+```
+
+Only one temporary pointer is used.
+
+---
+
+# 🎓 Key Takeaways
+
+* First, check whether the index is valid.
+* A Doubly Linked List allows traversal from both directions.
+* Start from the `head` when the index is in the first half.
+* Start from the `tail` when the index is in the second half.
+* Use `next` to move forward.
+* Use `prev` to move backward.
+* `length / 2` helps determine which end is closer.
+* The worst-case time complexity remains **O(n)**.
+* The space complexity is **O(1)**.
+
+---
+
+## 📌 Interview Tip
+
+**Question:** What is the advantage of implementing `get()` in a Doubly Linked List compared with a Singly Linked List?
+
+**Answer:**
+
+In a Singly Linked List, traversal must always begin from the head because nodes only contain a `next` pointer.
+
+In a Doubly Linked List, traversal can begin from either the head or the tail. By checking whether the requested index is in the first or second half of the list, we can start from the closer end and reduce the number of node movements.
