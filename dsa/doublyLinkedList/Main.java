@@ -29,5 +29,14 @@ public class Main {
         System.out.println("Setting the value as 1 at index 1");
         myDLL.set(1, 1);
         myDLL.printList();
+        System.out.println("insert at end");
+        myDLL.insert(2, 3);
+        myDLL.printList();
+        System.out.println("Insert at beginning");
+        myDLL.insert(0, 7);
+        myDLL.printList();
+        System.out.println("insert");
+        myDLL.insert(1, 5);
+        myDLL.printList();
     }
 }

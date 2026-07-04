@@ -2772,3 +2772,782 @@ O(n)
 ```
 
 So the overall time complexity of `set()` is **O(n)**.
+------------------------------
+# ➕ insert(index, value)
+
+The **`insert()`** method adds a new node at a specific index in the Doubly Linked List.
+
+Depending on the index:
+
+* If the index is `0`, use `prepend()`.
+* If the index is equal to `length`, use `append()`.
+* Otherwise, insert the new node between two existing nodes.
+
+Since this is a Doubly Linked List, both the `next` and `prev` pointers must be updated correctly.
+
+---
+
+## 💻 Java Solution
+
+```java
+public boolean insert(int index, int value) {
+    if(index < 0 || index > length) return false;
+
+    if(index == 0) {
+        prepend(value);
+        return true;
+    }
+
+    if(index == length) {
+        append(value);
+        return true;
+    }
+
+    Node newNode = new Node(value);
+    Node before = get(index - 1);
+    Node after = before.next;
+
+    newNode.prev = before;
+    newNode.next = after;
+    before.next = newNode;
+    after.prev = newNode;
+
+    length++;
+
+    return true;
+}
+```
+
+---
+
+# 📖 Code Explanation
+
+### Step 1: Check if the Index is Valid
+
+```java
+if(index < 0 || index > length) return false;
+```
+
+Checks whether the given index is valid.
+
+For example, suppose:
+
+```text
+10 ⇄ 20 ⇄ 30
+
+length = 3
+```
+
+Valid insertion indexes are:
+
+```text
+0, 1, 2, 3
+```
+
+Index `3` is valid because inserting at index `length` means adding the node at the end.
+
+Invalid indexes include:
+
+```text
+-1, 4, 5...
+```
+
+If the index is invalid, return `false`.
+
+---
+
+### Step 2: Check if Inserting at the Beginning
+
+```java
+if(index == 0) {
+    prepend(value);
+    return true;
+}
+```
+
+If the index is `0`, the new node should be added at the beginning of the list.
+
+Instead of writing the insertion logic again, we reuse the existing `prepend()` method.
+
+Example:
+
+```text
+10 ⇄ 20 ⇄ 30
+```
+
+Call:
+
+```java
+insert(0, 5);
+```
+
+The method calls:
+
+```java
+prepend(5);
+```
+
+Result:
+
+```text
+5 ⇄ 10 ⇄ 20 ⇄ 30
+```
+
+Then return `true`.
+
+---
+
+### Step 3: Check if Inserting at the End
+
+```java
+if(index == length) {
+    append(value);
+    return true;
+}
+```
+
+If the index is equal to the length, the new node should be added at the end of the list.
+
+Instead of writing the insertion logic again, we reuse the existing `append()` method.
+
+Example:
+
+```text
+10 ⇄ 20 ⇄ 30
+
+length = 3
+```
+
+Call:
+
+```java
+insert(3, 40);
+```
+
+The method calls:
+
+```java
+append(40);
+```
+
+Result:
+
+```text
+10 ⇄ 20 ⇄ 30 ⇄ 40
+```
+
+Then return `true`.
+
+---
+
+# 🔗 Inserting Between Two Nodes
+
+If the index is neither `0` nor `length`, the new node must be inserted between two existing nodes.
+
+Example:
+
+```text
+Index
+
+ 0      1      2      3
+
+10  ⇄  20  ⇄  30  ⇄  40
+```
+
+Call:
+
+```java
+insert(2, 25);
+```
+
+We want:
+
+```text
+10 ⇄ 20 ⇄ 25 ⇄ 30 ⇄ 40
+```
+
+The new node must be inserted between:
+
+```text
+20 ⇄ 30
+```
+
+---
+
+### Step 4: Create a New Node
+
+```java
+Node newNode = new Node(value);
+```
+
+Creates a new node containing the given value.
+
+Initially:
+
+```text
+null ← 25 → null
+```
+
+The new node is not yet connected to the Doubly Linked List.
+
+---
+
+### Step 5: Find the Node Before the Insertion Position
+
+```java
+Node before = get(index - 1);
+```
+
+Gets the node immediately before the insertion index.
+
+Example:
+
+```java
+insert(2, 25);
+```
+
+We need to insert at index:
+
+```text
+2
+```
+
+Therefore:
+
+```text
+index - 1 = 1
+```
+
+The method calls:
+
+```java
+get(1);
+```
+
+Result:
+
+```text
+before → 20
+```
+
+---
+
+### Step 6: Store the Node After the Insertion Position
+
+```java
+Node after = before.next;
+```
+
+Gets the node that currently comes after `before`.
+
+Before insertion:
+
+```text
+20 ⇄ 30
+```
+
+Therefore:
+
+```text
+before → 20
+
+after → 30
+```
+
+Now we know exactly where the new node should be inserted.
+
+```text
+before       newNode       after
+
+  20            25           30
+```
+
+---
+
+# 🔥 Updating the Four Pointers
+
+This is the most important part of inserting a node into a Doubly Linked List.
+
+We need to create four connections.
+
+Before:
+
+```text
+before ⇄ after
+
+  20   ⇄   30
+```
+
+New Node:
+
+```text
+25
+```
+
+After:
+
+```text
+before ⇄ newNode ⇄ after
+
+  20   ⇄   25    ⇄   30
+```
+
+---
+
+### Step 7: Connect the New Node Backward
+
+```java
+newNode.prev = before;
+```
+
+Makes the new node's `prev` pointer point to the node before it.
+
+```text
+20 ← 25
+```
+
+Now:
+
+```text
+25.prev → 20
+```
+
+---
+
+### Step 8: Connect the New Node Forward
+
+```java
+newNode.next = after;
+```
+
+Makes the new node's `next` pointer point to the node after it.
+
+```text
+25 → 30
+```
+
+Now:
+
+```text
+25.next → 30
+```
+
+At this stage:
+
+```text
+20 ← 25 → 30
+```
+
+The new node knows both of its neighbors.
+
+---
+
+### Step 9: Connect the Previous Node to the New Node
+
+```java
+before.next = newNode;
+```
+
+Changes the `next` pointer of the previous node.
+
+Before:
+
+```text
+20.next → 30
+```
+
+After:
+
+```text
+20.next → 25
+```
+
+Now:
+
+```text
+20 → 25 → 30
+```
+
+---
+
+### Step 10: Connect the Next Node Back to the New Node
+
+```java
+after.prev = newNode;
+```
+
+Changes the `prev` pointer of the next node.
+
+Before:
+
+```text
+30.prev → 20
+```
+
+After:
+
+```text
+30.prev → 25
+```
+
+Now all four connections are complete.
+
+```text
+20 ⇄ 25 ⇄ 30
+```
+
+---
+
+### Step 11: Increase the Length
+
+```java
+length++;
+```
+
+A new node has been added, so increase the total number of nodes by one.
+
+---
+
+### Step 12: Return `true`
+
+```java
+return true;
+```
+
+Returns `true` because the new node was successfully inserted.
+
+---
+
+# 🖼 Complete Example
+
+Initial List:
+
+```text
+Index
+
+ 0      1      2      3
+
+10  ⇄  20  ⇄  30  ⇄  40
+```
+
+Call:
+
+```java
+insert(2, 25);
+```
+
+---
+
+### Find `before`
+
+```text
+before = get(1)
+
+before → 20
+```
+
+---
+
+### Find `after`
+
+```text
+after = before.next
+
+after → 30
+```
+
+---
+
+### Create New Node
+
+```text
+newNode → 25
+```
+
+---
+
+### Current Situation
+
+```text
+before       newNode       after
+
+  20            25           30
+```
+
+---
+
+### Connect New Node Backward
+
+```java
+newNode.prev = before;
+```
+
+```text
+20 ← 25
+```
+
+---
+
+### Connect New Node Forward
+
+```java
+newNode.next = after;
+```
+
+```text
+20 ← 25 → 30
+```
+
+---
+
+### Connect Before to New Node
+
+```java
+before.next = newNode;
+```
+
+```text
+20 ⇄ 25 → 30
+```
+
+---
+
+### Connect After Back to New Node
+
+```java
+after.prev = newNode;
+```
+
+```text
+20 ⇄ 25 ⇄ 30
+```
+
+---
+
+### Final List
+
+```text
+10 ⇄ 20 ⇄ 25 ⇄ 30 ⇄ 40
+```
+
+---
+
+# 🧠 Easy Way to Remember the Four Pointer Changes
+
+Think about the new node first:
+
+```java
+newNode.prev = before;
+newNode.next = after;
+```
+
+Then update the surrounding nodes:
+
+```java
+before.next = newNode;
+after.prev = newNode;
+```
+
+So the pattern is:
+
+```text
+Connect New Node to Neighbors
+
+↓
+
+Connect Neighbors to New Node
+```
+
+Or simply remember:
+
+```text
+New Node:
+
+prev → before
+next → after
+
+
+Neighbors:
+
+before.next → newNode
+after.prev  → newNode
+```
+
+---
+
+# ❓ Why Do We Use `get(index - 1)`?
+
+We need the node immediately before the insertion position.
+
+Example:
+
+```java
+insert(2, 25);
+```
+
+The new node should be placed at index `2`.
+
+Therefore, the previous node is at:
+
+```text
+2 - 1 = 1
+```
+
+So we use:
+
+```java
+get(index - 1);
+```
+
+---
+
+# ❓ Why Do We Store `after = before.next`?
+
+Once we know the previous node, its `next` pointer gives us the node after the insertion position.
+
+```java
+Node after = before.next;
+```
+
+Now we have:
+
+```text
+before
+
+↓
+
+20 ⇄ 30
+
+     ↑
+
+   after
+```
+
+This makes reconnecting all the pointers easier to understand.
+
+---
+
+# ❓ Why Do We Need Four Pointer Updates?
+
+Because a Doubly Linked List has connections in both directions.
+
+For:
+
+```text
+20 ⇄ 25 ⇄ 30
+```
+
+We need:
+
+```text
+25.prev → 20
+
+25.next → 30
+
+20.next → 25
+
+30.prev → 25
+```
+
+If even one of these connections is missing, the Doubly Linked List may become incorrectly connected.
+
+---
+
+# ⏱ Time Complexity
+
+```text
+Time Complexity : O(n)
+```
+
+For insertion at the beginning:
+
+```text
+O(1)
+```
+
+For insertion at the end:
+
+```text
+O(1)
+```
+
+For insertion in the middle, we use:
+
+```java
+get(index - 1);
+```
+
+The `get()` method may require traversal.
+
+Therefore, the overall worst-case time complexity is:
+
+```text
+O(n)
+```
+
+---
+
+# 💾 Space Complexity
+
+```text
+Space Complexity : O(1)
+```
+
+Only a few pointer variables and one new node are used.
+
+---
+
+# 📊 Complexity Summary
+
+| Operation           | Complexity |
+| ------------------- | ---------- |
+| Insert at Beginning | O(1)       |
+| Insert at End       | O(1)       |
+| Insert in Middle    | O(n)       |
+| Overall Worst Case  | **O(n)**   |
+| Space Complexity    | **O(1)**   |
+
+---
+
+# 🎓 Key Takeaways
+
+* First, validate the index.
+* Use `prepend()` when inserting at index `0`.
+* Use `append()` when inserting at index `length`.
+* Use `get(index - 1)` to find the node before the insertion position.
+* Store the node after the insertion position.
+* Connect the new node to both neighboring nodes.
+* Connect both neighboring nodes back to the new node.
+* Increase the length.
+* Return `true` when the insertion succeeds.
+* Inserting into a Doubly Linked List requires correctly updating both `next` and `prev` pointers.
+
+---
+
+## 📌 Interview Tip
+
+A very common interview question is:
+
+**How many pointer connections must be updated when inserting a node in the middle of a Doubly Linked List?**
+
+The answer is **four**:
+
+```java
+newNode.prev = before;
+newNode.next = after;
+before.next = newNode;
+after.prev = newNode;
+```
+
+The easiest way to remember them is:
+
+```text
+First:
+
+Connect New Node → Neighbors
+
+Then:
+
+Connect Neighbors → New Node
+```
+----------------------------------------------------------------
