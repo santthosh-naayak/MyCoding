@@ -2263,3 +2263,512 @@ Only one temporary pointer is used.
 In a Singly Linked List, traversal must always begin from the head because nodes only contain a `next` pointer.
 
 In a Doubly Linked List, traversal can begin from either the head or the tail. By checking whether the requested index is in the first or second half of the list, we can start from the closer end and reduce the number of node movements.
+---------------
+# ✏️ set(index, value)
+
+The **`set()`** method updates the value of an existing node at a specific index in the Doubly Linked List.
+
+Instead of writing the traversal logic again, the method uses the existing **`get()`** method to find the node.
+
+If the node exists, its value is updated and the method returns `true`.
+
+If the index is invalid, the method returns `false`.
+
+---
+
+## 💻 Java Solution
+
+```java
+public boolean set(int index, int value) {
+    Node temp = get(index);
+
+    if(temp != null) {
+        temp.value = value;
+        return true;
+    }
+
+    return false;
+}
+```
+
+---
+
+# 📖 Code Explanation
+
+### Step 1: Get the Node at the Given Index
+
+```java
+Node temp = get(index);
+```
+
+Calls the existing **`get()`** method to find the node at the specified index.
+
+For example:
+
+```text
+10 ⇄ 20 ⇄ 30 ⇄ 40
+```
+
+Call:
+
+```java
+set(2, 50);
+```
+
+The method first executes:
+
+```java
+get(2);
+```
+
+The `get()` method returns:
+
+```text
+temp → 30
+```
+
+---
+
+### Step 2: Check if the Node Exists
+
+```java
+if(temp != null)
+```
+
+Checks whether the `get()` method successfully found a node.
+
+If the index is valid:
+
+```text
+temp → Node
+```
+
+If the index is invalid:
+
+```text
+temp → null
+```
+
+---
+
+### Step 3: Update the Node Value
+
+```java
+temp.value = value;
+```
+
+Changes the value stored inside the node.
+
+Before:
+
+```text
+10 ⇄ 20 ⇄ 30 ⇄ 40
+```
+
+Call:
+
+```java
+set(2, 50);
+```
+
+The node at index `2` is:
+
+```text
+30
+```
+
+Update:
+
+```text
+30 → 50
+```
+
+After:
+
+```text
+10 ⇄ 20 ⇄ 50 ⇄ 40
+```
+
+Only the value is changed.
+
+The `next` and `prev` pointers remain unchanged.
+
+---
+
+### Step 4: Return `true`
+
+```java
+return true;
+```
+
+If the value was successfully updated, return `true`.
+
+Example:
+
+```java
+set(2, 50);
+```
+
+Returns:
+
+```text
+true
+```
+
+---
+
+### Step 5: Return `false`
+
+```java
+return false;
+```
+
+If the index is invalid, `get(index)` returns `null`.
+
+Therefore, the value cannot be updated.
+
+Example:
+
+```text
+10 ⇄ 20 ⇄ 30
+```
+
+Call:
+
+```java
+set(5, 100);
+```
+
+Since index `5` does not exist:
+
+```java
+get(5);
+```
+
+Returns:
+
+```text
+null
+```
+
+Therefore:
+
+```text
+return false;
+```
+
+---
+
+# 🖼 Complete Example
+
+Initial List:
+
+```text
+Index
+
+ 0      1      2      3
+
+10  ⇄  20  ⇄  30  ⇄  40
+```
+
+Call:
+
+```java
+set(2, 100);
+```
+
+---
+
+### Find the Node
+
+```java
+Node temp = get(2);
+```
+
+Result:
+
+```text
+temp
+
+ ↓
+
+30
+```
+
+---
+
+### Check the Node
+
+```java
+if(temp != null)
+```
+
+Result:
+
+```text
+true
+```
+
+---
+
+### Update the Value
+
+```java
+temp.value = 100;
+```
+
+Result:
+
+```text
+10 ⇄ 20 ⇄ 100 ⇄ 40
+```
+
+---
+
+### Return
+
+```text
+true
+```
+
+---
+
+# ⚠️ Invalid Index Example
+
+Initial List:
+
+```text
+10 ⇄ 20 ⇄ 30
+```
+
+Call:
+
+```java
+set(5, 100);
+```
+
+Execution:
+
+```text
+get(5)
+
+↓
+
+null
+```
+
+Since:
+
+```text
+temp == null
+```
+
+The `if` block is skipped.
+
+Return:
+
+```text
+false
+```
+
+The linked list remains unchanged.
+
+---
+
+# ❓ Why Do We Use `get(index)`?
+
+```java
+Node temp = get(index);
+```
+
+We already created a method that knows how to find a node efficiently.
+
+Instead of writing the traversal logic again, we reuse the existing `get()` method.
+
+This makes the code:
+
+* Shorter
+* Cleaner
+* Easier to understand
+* Easier to maintain
+* Avoids duplicate code
+
+---
+
+# ❓ Why Do We Check `temp != null`?
+
+```java
+if(temp != null)
+```
+
+If the index is invalid, the `get()` method returns `null`.
+
+Trying to execute:
+
+```java
+temp.value = value;
+```
+
+when `temp` is `null` would cause a:
+
+```text
+NullPointerException
+```
+
+Therefore, we first check whether the node exists.
+
+---
+
+# ❓ Why Return a Boolean?
+
+The method returns:
+
+```text
+true
+```
+
+when the value was successfully updated.
+
+It returns:
+
+```text
+false
+```
+
+when the index is invalid.
+
+This allows the caller to know whether the operation succeeded.
+
+---
+
+# ❓ Are We Changing the Node or the Pointer?
+
+This line:
+
+```java
+temp.value = value;
+```
+
+changes only the **value stored inside the node**.
+
+It does not change:
+
+```text
+next
+```
+
+or:
+
+```text
+prev
+```
+
+Therefore, the structure of the Doubly Linked List remains unchanged.
+
+Before:
+
+```text
+10 ⇄ 20 ⇄ 30
+```
+
+After:
+
+```text
+10 ⇄ 50 ⇄ 30
+```
+
+The connections between nodes remain exactly the same.
+
+---
+
+# ⏱ Time Complexity
+
+```text
+Time Complexity : O(n)
+```
+
+The `set()` method itself performs a constant-time value update.
+
+However, it calls:
+
+```java
+get(index);
+```
+
+The `get()` method may need to traverse the linked list.
+
+Therefore, the overall time complexity is:
+
+```text
+O(n)
+```
+
+---
+
+# 💾 Space Complexity
+
+```text
+Space Complexity : O(1)
+```
+
+Only one temporary pointer is used.
+
+No additional data structures are created.
+
+---
+
+# 📊 Complexity Summary
+
+| Operation               | Complexity |
+| ----------------------- | ---------- |
+| Find Node using `get()` | O(n)       |
+| Update Value            | O(1)       |
+| Overall Time Complexity | **O(n)**   |
+| Space Complexity        | **O(1)**   |
+
+---
+
+# 🎓 Key Takeaways
+
+* Use `get(index)` to find the required node.
+* Check whether the returned node is `null`.
+* Update the node's value if it exists.
+* Return `true` when the update succeeds.
+* Return `false` when the index is invalid.
+* The `next` and `prev` pointers are not modified.
+* Reusing `get()` avoids duplicate traversal code.
+* The overall time complexity is **O(n)** because finding the node may require traversal.
+
+---
+
+## 📌 Interview Tip
+
+**Question:** Why is `set()` O(n) when updating a value is O(1)?
+
+**Answer:**
+
+Updating the value itself is an **O(1)** operation:
+
+```java
+temp.value = value;
+```
+
+However, before updating the value, we must first locate the node using:
+
+```java
+get(index);
+```
+
+Finding the node can require traversing the Doubly Linked List, which takes **O(n)** time in the worst case.
+
+Therefore:
+
+```text
+O(n) + O(1)
+
+↓
+
+O(n)
+```
+
+So the overall time complexity of `set()` is **O(n)**.

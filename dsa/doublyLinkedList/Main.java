@@ -24,5 +24,10 @@ public class Main {
         System.out.println("Printing the node value at given index");
         System.out.println(myDLL.get(0).value);
         System.out.println(myDLL.get(1).value);
+        System.out.println("Setting the value as 0 at index 0");
+        myDLL.set(0, 0);
+        System.out.println("Setting the value as 1 at index 1");
+        myDLL.set(1, 1);
+        myDLL.printList();
     }
 }
