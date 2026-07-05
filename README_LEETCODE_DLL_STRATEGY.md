@@ -4243,5 +4243,1538 @@ Update Head and Tail
 
 ---
 
+# 🚀 MyCoding - Data Structures & Algorithms in Java
+
+# 🧠 Strategy 4: Reverse Between
+
+> ⭐ **Doubly Linked List Interview Question**
+
+The **Reverse Between** problem requires reversing only a specific portion of a Doubly Linked List.
+
+The method receives two indexes:
+
+```text
+startIndex
+endIndex
+```
+
+The nodes between these indexes, including both the starting and ending nodes, must be reversed.
+
+The original Doubly Linked List must be modified **in-place** by changing the `next` and `prev` pointers.
+
+The values stored inside the nodes must not be swapped.
+
+---
+
+# 📖 Problem Statement
+
+Write a method that reverses the nodes of a Doubly Linked List between two given indexes:
+
+```text
+startIndex
+```
+
+and:
+
+```text
+endIndex
+```
+
+Both indexes are **zero-based**.
+
+For example:
+
+```text
+Index
+
+ 0      1      2      3      4
+
+ 1  ⇄   2  ⇄   3  ⇄   4  ⇄   5
+```
+
+Call:
+
+```java
+reverseBetween(1, 3);
+```
+
+The nodes between indexes `1` and `3` are:
+
+```text
+2 ⇄ 3 ⇄ 4
+```
+
+Reverse them:
+
+```text
+4 ⇄ 3 ⇄ 2
+```
+
+Final Result:
+
+```text
+1 ⇄ 4 ⇄ 3 ⇄ 2 ⇄ 5
+```
+
+---
+
+# 📌 Method Signature
+
+```java
+public void reverseBetween(int startIndex, int endIndex)
+```
+
+---
+
+# 🎯 Constraints
+
+* `startIndex` and `endIndex` are zero-based.
+* The Doubly Linked List may be empty.
+* The list may contain only one node.
+* If `startIndex == endIndex`, no changes should occur.
+* The existing nodes must be reused.
+* Do not swap node values.
+* Modify the original list in-place.
+* Both `next` and `prev` pointers must remain correct.
+
+---
+
+# 💡 Example 1
+
+### Input
+
+```text
+1 ⇄ 2 ⇄ 3 ⇄ 4 ⇄ 5
+```
+
+Call:
+
+```java
+reverseBetween(1, 3);
+```
+
+Reverse:
+
+```text
+2 ⇄ 3 ⇄ 4
+```
+
+Result:
+
+```text
+1 ⇄ 4 ⇄ 3 ⇄ 2 ⇄ 5
+```
+
+---
+
+# 💡 Example 2
+
+### Input
+
+```text
+1 ⇄ 2 ⇄ 3 ⇄ 4 ⇄ 5
+```
+
+Call:
+
+```java
+reverseBetween(0, 4);
+```
+
+The entire list is reversed.
+
+Result:
+
+```text
+5 ⇄ 4 ⇄ 3 ⇄ 2 ⇄ 1
+```
+
+---
+
+# 💡 Example 3
+
+### Input
+
+```text
+1 ⇄ 2 ⇄ 3 ⇄ 4 ⇄ 5
+```
+
+Call:
+
+```java
+reverseBetween(2, 2);
+```
+
+Since:
+
+```text
+startIndex == endIndex
+```
+
+no reversal is required.
+
+Result:
+
+```text
+1 ⇄ 2 ⇄ 3 ⇄ 4 ⇄ 5
+```
+
+---
+
+# 🎯 Main Challenge
+
+Consider:
+
+```text
+1 ⇄ 2 ⇄ 3 ⇄ 4 ⇄ 5
+```
+
+Call:
+
+```java
+reverseBetween(1, 3);
+```
+
+We need to identify four important positions:
+
+```text
+Before Start
+
+Start
+
+End
+
+After End
+```
+
+For this example:
+
+```text
+Before Start → 1
+
+Start        → 2
+
+End          → 4
+
+After End    → 5
+```
+
+Visualization:
+
+```text
+beforeStart    startNode         endNode    afterEnd
+
+     ↓             ↓                ↓           ↓
+
+     1      ⇄      2   ⇄   3   ⇄   4     ⇄     5
+```
+
+We reverse:
+
+```text
+2 ⇄ 3 ⇄ 4
+```
+
+Then reconnect:
+
+```text
+1 ⇄ 4 ⇄ 3 ⇄ 2 ⇄ 5
+```
+
+---
+
+# 💡 Recommended Approach
+
+The solution can be divided into three main parts:
+
+```text
+1. Find the start of the section.
+
+2. Reverse the pointers inside the section.
+
+3. Reconnect the reversed section with the remaining list.
+```
+
+---
+
+# 💻 Java Solution
+
+```java
+public void reverseBetween(int startIndex, int endIndex) {
+
+    if (head == null || startIndex == endIndex) {
+        return;
+    }
+
+    Node current = get(startIndex);
+    Node beforeStart = current.prev;
+    Node startNode = current;
+
+    for (int i = 0; i <= endIndex - startIndex; i++) {
+
+        Node nextNode = current.next;
+
+        current.next = current.prev;
+        current.prev = nextNode;
+
+        current = nextNode;
+    }
+
+    Node endNode = startNode.prev;
+    Node afterEnd = current;
+
+    if (beforeStart != null) {
+        beforeStart.next = endNode;
+    } else {
+        head = endNode;
+    }
+
+    endNode.prev = beforeStart;
+
+    startNode.next = afterEnd;
+
+    if (afterEnd != null) {
+        afterEnd.prev = startNode;
+    } else {
+        tail = startNode;
+    }
+}
+```
+
+---
+
+# ⚙️ Algorithm
+
+1. Check whether the list is empty.
+2. Check whether `startIndex` and `endIndex` are equal.
+3. Find the node at `startIndex`.
+4. Store the node before the reversal section.
+5. Store the original starting node.
+6. Traverse from `startIndex` to `endIndex`.
+7. Save the next node before modifying pointers.
+8. Swap the `next` and `prev` pointers of the current node.
+9. Move to the saved next node.
+10. Find the new first node of the reversed section.
+11. Store the node after the reversed section.
+12. Connect the left side to the reversed section.
+13. Connect the reversed section to the right side.
+14. Update `head` or `tail` when necessary.
+
+---
+
+# 📖 Code Explanation
+
+## Step 1: Handle Simple Cases
+
+```java
+if (head == null || startIndex == endIndex) {
+    return;
+}
+```
+
+If the list is empty:
+
+```text
+null
+```
+
+there is nothing to reverse.
+
+Also, if:
+
+```text
+startIndex == endIndex
+```
+
+only one node is selected.
+
+Reversing one node does not change the list.
+
+Therefore, return immediately.
+
+---
+
+## Step 2: Find the Starting Node
+
+```java
+Node current = get(startIndex);
+```
+
+Use the existing `get()` method to find the node where the reversal should begin.
+
+Example:
+
+```text
+Index
+
+ 0      1      2      3      4
+
+ 1  ⇄   2  ⇄   3  ⇄   4  ⇄   5
+```
+
+Call:
+
+```java
+reverseBetween(1, 3);
+```
+
+Then:
+
+```text
+current → 2
+```
+
+---
+
+## Step 3: Store the Node Before the Reversal
+
+```java
+Node beforeStart = current.prev;
+```
+
+The node before `current` must be saved.
+
+Example:
+
+```text
+1 ⇄ 2 ⇄ 3 ⇄ 4 ⇄ 5
+```
+
+Since:
+
+```text
+current → 2
+```
+
+we get:
+
+```text
+beforeStart → 1
+```
+
+Why save it?
+
+Because after reversing the section, we need to reconnect the left side of the list.
+
+---
+
+## Step 4: Store the Original Starting Node
+
+```java
+Node startNode = current;
+```
+
+Save the original first node of the section.
+
+Example:
+
+```text
+startNode → 2
+```
+
+After reversing:
+
+```text
+2 ⇄ 3 ⇄ 4
+```
+
+becomes:
+
+```text
+4 ⇄ 3 ⇄ 2
+```
+
+Notice that the original starting node:
+
+```text
+2
+```
+
+becomes the last node of the reversed section.
+
+Therefore, we save it in `startNode`.
+
+---
+
+# 🔥 Reversing the Selected Section
+
+```java
+for (int i = 0; i <= endIndex - startIndex; i++)
+```
+
+This loop processes every node from `startIndex` through `endIndex`.
+
+For example:
+
+```text
+startIndex = 1
+
+endIndex = 3
+```
+
+Number of nodes:
+
+```text
+endIndex - startIndex + 1
+
+3 - 1 + 1
+
+= 3
+```
+
+The loop condition:
+
+```text
+i <= endIndex - startIndex
+```
+
+runs exactly three times.
+
+---
+
+## Step 5: Save the Next Node
+
+```java
+Node nextNode = current.next;
+```
+
+Before changing the pointers, save the next node.
+
+This is extremely important.
+
+Suppose:
+
+```text
+current → 2
+```
+
+Then:
+
+```text
+nextNode → 3
+```
+
+We are about to change:
+
+```text
+current.next
+```
+
+Without saving the next node first, we could lose the remaining part of the list.
+
+---
+
+## Step 6: Reverse the `next` Pointer
+
+```java
+current.next = current.prev;
+```
+
+The current node's `next` pointer now points to its original previous node.
+
+Suppose:
+
+```text
+1 ⇄ 2 ⇄ 3
+```
+
+and:
+
+```text
+current → 2
+```
+
+Before:
+
+```text
+2.next → 3
+```
+
+After:
+
+```text
+2.next → 1
+```
+
+---
+
+## Step 7: Reverse the `prev` Pointer
+
+```java
+current.prev = nextNode;
+```
+
+The current node's `prev` pointer now points to its original next node.
+
+Before:
+
+```text
+2.prev → 1
+```
+
+After:
+
+```text
+2.prev → 3
+```
+
+Therefore:
+
+```text
+Original:
+
+1 ← 2 → 3
+
+After Swapping:
+
+1 ← 2 → 3
+
+    next prev
+```
+
+In simpler terms:
+
+```text
+Old next becomes new prev.
+
+Old prev becomes new next.
+```
+
+---
+
+## Step 8: Move to the Next Original Node
+
+```java
+current = nextNode;
+```
+
+Earlier, we saved:
+
+```java
+Node nextNode = current.next;
+```
+
+before changing the pointers.
+
+Now we use that saved reference to continue traversing the original list.
+
+---
+
+# 📊 Reversal Dry Run
+
+Original:
+
+```text
+1 ⇄ 2 ⇄ 3 ⇄ 4 ⇄ 5
+```
+
+Reverse:
+
+```text
+Index 1 through Index 3
+```
+
+---
+
+## Iteration 1
+
+Current:
+
+```text
+2
+```
+
+Save:
+
+```text
+nextNode → 3
+```
+
+Reverse pointers:
+
+```text
+2.next → 1
+
+2.prev → 3
+```
+
+Move:
+
+```text
+current → 3
+```
+
+---
+
+## Iteration 2
+
+Current:
+
+```text
+3
+```
+
+Save:
+
+```text
+nextNode → 4
+```
+
+Reverse pointers:
+
+```text
+3.next → 2
+
+3.prev → 4
+```
+
+Move:
+
+```text
+current → 4
+```
+
+---
+
+## Iteration 3
+
+Current:
+
+```text
+4
+```
+
+Save:
+
+```text
+nextNode → 5
+```
+
+Reverse pointers:
+
+```text
+4.next → 3
+
+4.prev → 5
+```
+
+Move:
+
+```text
+current → 5
+```
+
+Loop ends.
+
+---
+
+# 🔗 Reconnecting the Reversed Section
+
+After the loop, we need to reconnect the reversed portion with the remaining list.
+
+The reversed section is:
+
+```text
+4 ⇄ 3 ⇄ 2
+```
+
+The surrounding nodes are:
+
+```text
+1
+```
+
+and:
+
+```text
+5
+```
+
+We need:
+
+```text
+1 ⇄ 4 ⇄ 3 ⇄ 2 ⇄ 5
+```
+
+---
+
+## Step 9: Find the New Beginning of the Reversed Section
+
+```java
+Node endNode = startNode.prev;
+```
+
+This line can initially look confusing.
+
+Remember:
+
+```text
+startNode → 2
+```
+
+After reversal, node `2` becomes the last node of the reversed section.
+
+Its `prev` pointer now points to:
+
+```text
+3
+```
+
+Wait—so why would `startNode.prev` be the new beginning?
+
+This is exactly where pointer tracking becomes tricky.
+
+With the reversal loop shown above, after processing the full section, the safer and clearer approach is to track the final processed node directly rather than deriving it afterward.
+
+A clearer implementation is shown below.
+
+---
+
+# ✅ Clearer Java Solution
+
+```java
+public void reverseBetween(int startIndex, int endIndex) {
+
+    if (head == null || startIndex == endIndex) {
+        return;
+    }
+
+    Node current = get(startIndex);
+
+    Node beforeStart = current.prev;
+    Node startNode = current;
+    Node endNode = null;
+
+    for (int i = 0; i <= endIndex - startIndex; i++) {
+
+        Node nextNode = current.next;
+
+        current.next = current.prev;
+        current.prev = nextNode;
+
+        endNode = current;
+        current = nextNode;
+    }
+
+    Node afterEnd = current;
+
+    if (beforeStart != null) {
+        beforeStart.next = endNode;
+    } else {
+        head = endNode;
+    }
+
+    endNode.prev = beforeStart;
+
+    startNode.next = afterEnd;
+
+    if (afterEnd != null) {
+        afterEnd.prev = startNode;
+    } else {
+        tail = startNode;
+    }
+}
+```
+
+This version explicitly stores:
+
+```text
+endNode
+```
+
+during traversal.
+
+After the final iteration:
+
+```text
+endNode
+```
+
+points to the new first node of the reversed section.
+
+---
+
+# 🧠 Four Important Pointers
+
+The easiest way to understand this problem is to remember four nodes:
+
+```text
+beforeStart
+
+startNode
+
+endNode
+
+afterEnd
+```
+
+Before reversal:
+
+```text
+beforeStart ⇄ startNode ⇄ ... ⇄ endNode ⇄ afterEnd
+```
+
+Example:
+
+```text
+1 ⇄ 2 ⇄ 3 ⇄ 4 ⇄ 5
+```
+
+Pointers:
+
+```text
+beforeStart → 1
+
+startNode   → 2
+
+endNode     → 4
+
+afterEnd    → 5
+```
+
+After reversing the middle section:
+
+```text
+1 ⇄ 4 ⇄ 3 ⇄ 2 ⇄ 5
+```
+
+Now:
+
+```text
+beforeStart → 1
+
+endNode     → 4
+
+startNode   → 2
+
+afterEnd    → 5
+```
+
+---
+
+# 🔗 Left-Side Reconnection
+
+```java
+if (beforeStart != null) {
+    beforeStart.next = endNode;
+} else {
+    head = endNode;
+}
+```
+
+If a node exists before the reversed section:
+
+```text
+beforeStart → 1
+```
+
+connect it to:
+
+```text
+endNode → 4
+```
+
+Result:
+
+```text
+1 → 4
+```
+
+If there is no node before the reversed section, it means the reversal started at index `0`.
+
+Therefore:
+
+```java
+head = endNode;
+```
+
+---
+
+## Fix the New Beginning's `prev`
+
+```java
+endNode.prev = beforeStart;
+```
+
+Creates the backward connection.
+
+For example:
+
+```text
+1 ← 4
+```
+
+Together:
+
+```text
+1 ⇄ 4
+```
+
+If the reversal starts at the head:
+
+```text
+beforeStart = null
+```
+
+Therefore:
+
+```text
+endNode.prev = null
+```
+
+which correctly makes `endNode` the new head.
+
+---
+
+# 🔗 Right-Side Reconnection
+
+```java
+startNode.next = afterEnd;
+```
+
+Remember that the original starting node becomes the last node of the reversed section.
+
+Example:
+
+```text
+startNode → 2
+```
+
+The node after the reversed section is:
+
+```text
+afterEnd → 5
+```
+
+Connect:
+
+```text
+2 → 5
+```
+
+---
+
+## Fix the Right-Side `prev`
+
+```java
+if (afterEnd != null) {
+    afterEnd.prev = startNode;
+} else {
+    tail = startNode;
+}
+```
+
+If a node exists after the reversed section:
+
+```text
+afterEnd → 5
+```
+
+connect it backward:
+
+```text
+5.prev → 2
+```
+
+Together:
+
+```text
+2 ⇄ 5
+```
+
+If there is no node after the reversed section, the reversal reached the end of the list.
+
+Therefore:
+
+```java
+tail = startNode;
+```
+
+---
+
+# 🖼 Complete Dry Run
+
+Input:
+
+```text
+1 ⇄ 2 ⇄ 3 ⇄ 4 ⇄ 5
+```
+
+Call:
+
+```java
+reverseBetween(1, 3);
+```
+
+Initially:
+
+```text
+beforeStart → 1
+
+startNode → 2
+
+current → 2
+```
+
+---
+
+### Reverse Node 2
+
+```text
+nextNode → 3
+
+2.next → 1
+
+2.prev → 3
+
+endNode → 2
+
+current → 3
+```
+
+---
+
+### Reverse Node 3
+
+```text
+nextNode → 4
+
+3.next → 2
+
+3.prev → 4
+
+endNode → 3
+
+current → 4
+```
+
+---
+
+### Reverse Node 4
+
+```text
+nextNode → 5
+
+4.next → 3
+
+4.prev → 5
+
+endNode → 4
+
+current → 5
+```
+
+Loop ends.
+
+Now:
+
+```text
+beforeStart → 1
+
+endNode → 4
+
+startNode → 2
+
+afterEnd → 5
+```
+
+Reconnect:
+
+```text
+1 ⇄ 4
+```
+
+and:
+
+```text
+2 ⇄ 5
+```
+
+Final Result:
+
+```text
+1 ⇄ 4 ⇄ 3 ⇄ 2 ⇄ 5
+```
+
+---
+
+# ⚠️ Edge Cases
+
+## Empty List
+
+```text
+null
+```
+
+No changes occur.
+
+---
+
+## Single Node
+
+```text
+1
+```
+
+Call:
+
+```java
+reverseBetween(0, 0);
+```
+
+No changes occur.
+
+---
+
+## Same Start and End Index
+
+```text
+1 ⇄ 2 ⇄ 3
+```
+
+Call:
+
+```java
+reverseBetween(1, 1);
+```
+
+Result:
+
+```text
+1 ⇄ 2 ⇄ 3
+```
+
+---
+
+## Reverse from Head
+
+Input:
+
+```text
+1 ⇄ 2 ⇄ 3 ⇄ 4 ⇄ 5
+```
+
+Call:
+
+```java
+reverseBetween(0, 2);
+```
+
+Result:
+
+```text
+3 ⇄ 2 ⇄ 1 ⇄ 4 ⇄ 5
+```
+
+The `head` must be updated.
+
+---
+
+## Reverse Through Tail
+
+Input:
+
+```text
+1 ⇄ 2 ⇄ 3 ⇄ 4 ⇄ 5
+```
+
+Call:
+
+```java
+reverseBetween(2, 4);
+```
+
+Result:
+
+```text
+1 ⇄ 2 ⇄ 5 ⇄ 4 ⇄ 3
+```
+
+The `tail` must be updated.
+
+---
+
+## Reverse Entire List
+
+Input:
+
+```text
+1 ⇄ 2 ⇄ 3 ⇄ 4 ⇄ 5
+```
+
+Call:
+
+```java
+reverseBetween(0, 4);
+```
+
+Result:
+
+```text
+5 ⇄ 4 ⇄ 3 ⇄ 2 ⇄ 1
+```
+
+Both `head` and `tail` must be updated.
+
+---
+
+# ❓ Why Save `nextNode`?
+
+```java
+Node nextNode = current.next;
+```
+
+Because we are about to change:
+
+```text
+current.next
+```
+
+Without saving the original next node, we could lose access to the remaining nodes.
+
+The pattern is:
+
+```text
+Save Next
+
+↓
+
+Change Pointers
+
+↓
+
+Move to Saved Next
+```
+
+---
+
+# ❓ Why Do We Need `beforeStart`?
+
+After reversing the selected section, we need to reconnect it to the left side of the list.
+
+Example:
+
+```text
+1 ⇄ 2 ⇄ 3 ⇄ 4 ⇄ 5
+```
+
+When reversing:
+
+```text
+2 ⇄ 3 ⇄ 4
+```
+
+we must remember:
+
+```text
+beforeStart → 1
+```
+
+so we can later create:
+
+```text
+1 ⇄ 4
+```
+
+---
+
+# ❓ Why Do We Need `startNode`?
+
+The original starting node becomes the last node of the reversed section.
+
+Before:
+
+```text
+2 ⇄ 3 ⇄ 4
+```
+
+After:
+
+```text
+4 ⇄ 3 ⇄ 2
+```
+
+Therefore:
+
+```text
+startNode → 2
+```
+
+must later connect to:
+
+```text
+afterEnd → 5
+```
+
+---
+
+# ❓ Why Do We Need `endNode`?
+
+The original ending node becomes the first node of the reversed section.
+
+Before:
+
+```text
+2 ⇄ 3 ⇄ 4
+```
+
+After:
+
+```text
+4 ⇄ 3 ⇄ 2
+```
+
+Therefore:
+
+```text
+endNode → 4
+```
+
+must connect to:
+
+```text
+beforeStart → 1
+```
+
+---
+
+# ⏱ Time Complexity
+
+```text
+Time Complexity : O(n)
+```
+
+The `get(startIndex)` method may require traversal.
+
+The selected portion is then traversed once.
+
+Therefore:
+
+```text
+O(n) + O(n)
+
+↓
+
+O(n)
+```
+
+The overall time complexity is:
+
+```text
+O(n)
+```
+
+---
+
+# 💾 Space Complexity
+
+```text
+Space Complexity : O(1)
+```
+
+Only a fixed number of pointer variables are used.
+
+No arrays, lists, sets, maps, or other additional data structures are created.
+
+---
+
+# 📊 Complexity Summary
+
+| Operation               | Complexity |
+| ----------------------- | ---------- |
+| Find Starting Node      | O(n)       |
+| Reverse Selected Nodes  | O(n)       |
+| Reconnect Left Side     | O(1)       |
+| Reconnect Right Side    | O(1)       |
+| Overall Time Complexity | **O(n)**   |
+| Space Complexity        | **O(1)**   |
+
+---
+
+# 🎓 Key Takeaways
+
+* Reverse only the nodes between `startIndex` and `endIndex`.
+* Do not swap node values.
+* Modify the list in-place.
+* Save the next node before changing pointers.
+* Reverse both `next` and `prev` pointers.
+* Keep track of the node before the reversed section.
+* Keep track of the original starting node.
+* Keep track of the final reversed node.
+* Keep track of the node after the reversed section.
+* Reconnect both sides after reversal.
+* Update `head` when reversing from index `0`.
+* Update `tail` when reversing through the last index.
+* The solution runs in **O(n)** time and **O(1)** extra space.
+
+---
+
+## 📌 Interview Tip
+
+The easiest way to solve **Reverse Between** is to divide the problem into three stages:
+
+```text
+Find
+
+↓
+
+Reverse
+
+↓
+
+Reconnect
+```
+
+Remember these four important pointers:
+
+```text
+beforeStart
+
+startNode
+
+endNode
+
+afterEnd
+```
+
+Before:
+
+```text
+beforeStart ⇄ startNode ⇄ ... ⇄ endNode ⇄ afterEnd
+```
+
+After:
+
+```text
+beforeStart ⇄ endNode ⇄ ... ⇄ startNode ⇄ afterEnd
+```
+
+The core pattern is:
+
+```text
+Save Next Node
+
+↓
+
+Reverse next and prev
+
+↓
+
+Move Forward Using Saved Node
+
+↓
+
+Reconnect Left Side
+
+↓
+
+Reconnect Right Side
+
+↓
+
+Update Head or Tail if Needed
+```
+
+---
 
 
