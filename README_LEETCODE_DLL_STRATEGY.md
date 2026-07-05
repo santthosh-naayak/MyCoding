@@ -1734,4 +1734,2514 @@ Swap head and tail
 ```
 
 ---
+# 🚀 MyCoding - Data Structures & Algorithms in Java
+
+# 🧠 Strategy 3: Partition List
+
+> ⭐ **Doubly Linked List Interview Question**
+
+The **Partition List** problem requires rearranging the nodes of a Doubly Linked List around a given value `x`.
+
+All nodes with values:
+
+```text
+value < x
+```
+
+must appear before nodes with values:
+
+```text
+value >= x
+```
+
+The relative order of nodes inside each partition must remain unchanged.
+
+The existing nodes must be reused by changing their `next` and `prev` pointers.
+
+---
+
+# 📖 Problem Statement
+
+Write a method called **`partitionList()`** that rearranges a Doubly Linked List so that:
+
+* Nodes with values less than `x` come first.
+* Nodes with values greater than or equal to `x` come afterward.
+* The original relative order inside each group is preserved.
+* The existing nodes are rearranged.
+* Both `next` and `prev` pointers must remain correct.
+
+---
+
+# 📌 Method Signature
+
+```java
+public void partitionList(int x)
+```
+
+---
+
+# 💡 Example 1
+
+### Input
+
+```text
+3 ⇄ 8 ⇄ 5 ⇄ 10 ⇄ 2 ⇄ 1
+
+x = 5
+```
+
+Nodes less than `5`:
+
+```text
+3, 2, 1
+```
+
+Nodes greater than or equal to `5`:
+
+```text
+8, 5, 10
+```
+
+### Output
+
+```text
+3 ⇄ 2 ⇄ 1 ⇄ 8 ⇄ 5 ⇄ 10
+```
+
+Notice that the relative order is preserved.
+
+For the first partition:
+
+```text
+3 → 2 → 1
+```
+
+For the second partition:
+
+```text
+8 → 5 → 10
+```
+
+---
+
+# 💡 Example 2
+
+### Input
+
+```text
+1 ⇄ 2 ⇄ 3
+
+x = 5
+```
+
+Every node is less than `5`.
+
+Therefore, the list remains:
+
+```text
+1 ⇄ 2 ⇄ 3
+```
+
+---
+
+# 💡 Example 3
+
+### Input
+
+```text
+6 ⇄ 7 ⇄ 8
+
+x = 5
+```
+
+Every node is greater than or equal to `5`.
+
+Therefore, the list remains:
+
+```text
+6 ⇄ 7 ⇄ 8
+```
+
+---
+
+# 🎯 Main Challenge
+
+Consider:
+
+```text
+3 ⇄ 8 ⇄ 5 ⇄ 10 ⇄ 2 ⇄ 1
+```
+
+We cannot simply move values around.
+
+We must rearrange the actual nodes.
+
+The desired result is:
+
+```text
+3 ⇄ 2 ⇄ 1 ⇄ 8 ⇄ 5 ⇄ 10
+```
+
+To solve this efficiently, we create two temporary chains:
+
+```text
+Less Partition
+```
+
+and:
+
+```text
+Greater Partition
+```
+
+The first chain stores nodes where:
+
+```text
+value < x
+```
+
+The second chain stores nodes where:
+
+```text
+value >= x
+```
+
+After processing every node, we connect the two chains.
+
+---
+
+# 💡 Recommended Approach
+
+Use:
+
+* Two dummy nodes.
+* Two pointers to build the partitions.
+* One pointer to traverse the original list.
+
+The pointers are:
+
+```text
+dummy1
+prev1
+
+dummy2
+prev2
+
+current
+```
+
+The first chain stores:
+
+```text
+value < x
+```
+
+The second chain stores:
+
+```text
+value >= x
+```
+
+---
+
+# 🖼 Main Idea
+
+Original List:
+
+```text
+3 ⇄ 8 ⇄ 5 ⇄ 10 ⇄ 2 ⇄ 1
+```
+
+After traversal:
+
+```text
+Less Partition
+
+dummy1 ⇄ 3 ⇄ 2 ⇄ 1
+```
+
+And:
+
+```text
+Greater Partition
+
+dummy2 ⇄ 8 ⇄ 5 ⇄ 10
+```
+
+Finally:
+
+```text
+3 ⇄ 2 ⇄ 1
+        ⇅
+8 ⇄ 5 ⇄ 10
+```
+
+Result:
+
+```text
+3 ⇄ 2 ⇄ 1 ⇄ 8 ⇄ 5 ⇄ 10
+```
+
+---
+
+# 💻 Java Solution
+
+```java
+public void partitionList(int x) {
+
+    if (head == null) return;
+
+    Node dummy1 = new Node(0);
+    Node dummy2 = new Node(0);
+
+    Node prev1 = dummy1;
+    Node prev2 = dummy2;
+
+    Node current = head;
+
+    while (current != null) {
+
+        Node nextNode = current.next;
+
+        current.next = null;
+        current.prev = null;
+
+        if (current.value < x) {
+
+            prev1.next = current;
+            current.prev = prev1;
+            prev1 = current;
+
+        } else {
+
+            prev2.next = current;
+            current.prev = prev2;
+            prev2 = current;
+        }
+
+        current = nextNode;
+    }
+
+    if (dummy1.next == null) {
+
+        head = dummy2.next;
+        head.prev = null;
+        tail = prev2;
+
+    } else {
+
+        head = dummy1.next;
+        head.prev = null;
+
+        prev1.next = dummy2.next;
+
+        if (dummy2.next != null) {
+            dummy2.next.prev = prev1;
+        }
+
+        tail = (dummy2.next == null) ? prev1 : prev2;
+    }
+}
+```
+
+---
+
+# ⚙️ Algorithm
+
+1. Check whether the list is empty.
+2. Create two dummy nodes.
+3. Create a pointer for the end of each partition.
+4. Start traversing from the head.
+5. Save the next node before changing any pointers.
+6. Disconnect the current node.
+7. If the current value is less than `x`, add it to the first partition.
+8. Otherwise, add it to the second partition.
+9. Move to the saved next node.
+10. Continue until every node is processed.
+11. Connect the two partitions.
+12. Update the head.
+13. Update the tail.
+14. Remove dummy-node connections from the final list.
+
+---
+
+# 📖 Code Explanation
+
+## Step 1: Handle an Empty List
+
+```java
+if (head == null) return;
+```
+
+If the Doubly Linked List is empty, there is nothing to partition.
+
+Therefore, immediately return.
+
+---
+
+## Step 2: Create Two Dummy Nodes
+
+```java
+Node dummy1 = new Node(0);
+Node dummy2 = new Node(0);
+```
+
+The first dummy node represents the beginning of the:
+
+```text
+Less Partition
+```
+
+The second dummy node represents the beginning of the:
+
+```text
+Greater Partition
+```
+
+Initially:
+
+```text
+dummy1
+```
+
+and:
+
+```text
+dummy2
+```
+
+are separate.
+
+---
+
+# ❓ Why Use Dummy Nodes?
+
+Without dummy nodes, we would need special logic for inserting the first node into each partition.
+
+For example:
+
+```text
+Is this the first node?
+
+Is the partition empty?
+
+Should this become the partition head?
+```
+
+Dummy nodes remove these special cases.
+
+Every node can simply be added after the current partition pointer.
+
+---
+
+## Step 3: Create Partition Pointers
+
+```java
+Node prev1 = dummy1;
+Node prev2 = dummy2;
+```
+
+`prev1` always points to the last node of the less partition.
+
+`prev2` always points to the last node of the greater partition.
+
+Initially:
+
+```text
+prev1
+  ↓
+
+dummy1
+```
+
+and:
+
+```text
+prev2
+  ↓
+
+dummy2
+```
+
+---
+
+## Step 4: Start Traversing the Original List
+
+```java
+Node current = head;
+```
+
+The `current` pointer starts at the first node.
+
+Example:
+
+```text
+current
+   ↓
+
+3 ⇄ 8 ⇄ 5 ⇄ 10 ⇄ 2 ⇄ 1
+```
+
+---
+
+## Step 5: Traverse Every Node
+
+```java
+while (current != null)
+```
+
+Continue processing nodes until the end of the original list is reached.
+
+---
+
+# 🔥 Step 6: Save the Next Node
+
+```java
+Node nextNode = current.next;
+```
+
+This is one of the most important lines in the solution.
+
+We are about to change:
+
+```text
+current.next
+```
+
+Therefore, we must first save the next node.
+
+Example:
+
+```text
+current
+   ↓
+
+3 ⇄ 8 ⇄ 5
+```
+
+Save:
+
+```text
+nextNode → 8
+```
+
+Now we can safely modify the pointers of node `3`.
+
+---
+
+# ❓ Why Do We Need `nextNode`?
+
+Suppose we immediately execute:
+
+```java
+current.next = null;
+```
+
+Then:
+
+```text
+3 → null
+```
+
+We would lose access to:
+
+```text
+8 ⇄ 5 ⇄ 10...
+```
+
+Therefore, first:
+
+```java
+Node nextNode = current.next;
+```
+
+Then modify the pointers.
+
+---
+
+## Step 7: Disconnect the Current Node
+
+```java
+current.next = null;
+current.prev = null;
+```
+
+Before:
+
+```text
+Previous ⇄ Current ⇄ Next
+```
+
+After:
+
+```text
+Previous
+
+Current
+
+Next
+```
+
+The current node is now isolated.
+
+This makes it safer and easier to add the node to one of the two partitions.
+
+---
+
+# 🔀 Step 8: Check the Node Value
+
+```java
+if (current.value < x)
+```
+
+If the value is less than `x`, add the node to the first partition.
+
+Otherwise, add it to the second partition.
+
+---
+
+# 🟢 Adding to the Less Partition
+
+```java
+prev1.next = current;
+current.prev = prev1;
+prev1 = current;
+```
+
+Suppose:
+
+```text
+Less Partition:
+
+dummy1 ⇄ 3
+```
+
+And:
+
+```text
+current → 2
+```
+
+First:
+
+```java
+prev1.next = current;
+```
+
+Creates the forward connection:
+
+```text
+3 → 2
+```
+
+Then:
+
+```java
+current.prev = prev1;
+```
+
+Creates the backward connection:
+
+```text
+3 ← 2
+```
+
+Together:
+
+```text
+3 ⇄ 2
+```
+
+Finally:
+
+```java
+prev1 = current;
+```
+
+moves the partition pointer.
+
+Now:
+
+```text
+dummy1 ⇄ 3 ⇄ 2
+                 ↑
+               prev1
+```
+
+---
+
+# 🔴 Adding to the Greater Partition
+
+```java
+prev2.next = current;
+current.prev = prev2;
+prev2 = current;
+```
+
+The exact same process happens for values greater than or equal to `x`.
+
+Example:
+
+```text
+Greater Partition:
+
+dummy2 ⇄ 8 ⇄ 5
+```
+
+If:
+
+```text
+current → 10
+```
+
+After adding:
+
+```text
+dummy2 ⇄ 8 ⇄ 5 ⇄ 10
+                         ↑
+                       prev2
+```
+
+---
+
+## Step 9: Move to the Next Original Node
+
+```java
+current = nextNode;
+```
+
+Earlier, we saved:
+
+```java
+Node nextNode = current.next;
+```
+
+Now we use that saved reference to continue traversing the original list.
+
+---
+
+# 📊 Complete Traversal Example
+
+Original:
+
+```text
+3 ⇄ 8 ⇄ 5 ⇄ 10 ⇄ 2 ⇄ 1
+
+x = 5
+```
+
+Process `3`:
+
+```text
+Less    : 3
+
+Greater :
+```
+
+Process `8`:
+
+```text
+Less    : 3
+
+Greater : 8
+```
+
+Process `5`:
+
+```text
+Less    : 3
+
+Greater : 8 ⇄ 5
+```
+
+Process `10`:
+
+```text
+Less    : 3
+
+Greater : 8 ⇄ 5 ⇄ 10
+```
+
+Process `2`:
+
+```text
+Less    : 3 ⇄ 2
+
+Greater : 8 ⇄ 5 ⇄ 10
+```
+
+Process `1`:
+
+```text
+Less    : 3 ⇄ 2 ⇄ 1
+
+Greater : 8 ⇄ 5 ⇄ 10
+```
+
+Now connect the partitions.
+
+---
+
+# 🔗 Connecting the Two Partitions
+
+After traversal:
+
+```text
+dummy1 ⇄ 3 ⇄ 2 ⇄ 1
+```
+
+and:
+
+```text
+dummy2 ⇄ 8 ⇄ 5 ⇄ 10
+```
+
+We need:
+
+```text
+3 ⇄ 2 ⇄ 1 ⇄ 8 ⇄ 5 ⇄ 10
+```
+
+---
+
+## Step 10: Handle an Empty Less Partition
+
+```java
+if (dummy1.next == null)
+```
+
+This means there were no values less than `x`.
+
+Example:
+
+```text
+6 ⇄ 7 ⇄ 8
+
+x = 5
+```
+
+The less partition is empty.
+
+Therefore:
+
+```java
+head = dummy2.next;
+head.prev = null;
+tail = prev2;
+```
+
+The greater partition becomes the entire list.
+
+---
+
+## Step 11: Set the New Head
+
+```java
+head = dummy1.next;
+head.prev = null;
+```
+
+The first real node after `dummy1` becomes the new head.
+
+Example:
+
+```text
+dummy1 ⇄ 3 ⇄ 2 ⇄ 1
+```
+
+Therefore:
+
+```text
+head → 3
+```
+
+Since the head should not have a previous node:
+
+```java
+head.prev = null;
+```
+
+---
+
+## Step 12: Connect the Partitions
+
+```java
+prev1.next = dummy2.next;
+```
+
+`prev1` points to the last node of the less partition.
+
+```text
+3 ⇄ 2 ⇄ 1
+        ↑
+      prev1
+```
+
+`dummy2.next` points to the first real node of the greater partition.
+
+```text
+dummy2 ⇄ 8 ⇄ 5 ⇄ 10
+         ↑
+    dummy2.next
+```
+
+Connect them:
+
+```text
+1 → 8
+```
+
+---
+
+## Step 13: Create the Backward Connection
+
+```java
+if (dummy2.next != null) {
+    dummy2.next.prev = prev1;
+}
+```
+
+The forward connection was:
+
+```text
+1 → 8
+```
+
+Now create the backward connection:
+
+```text
+1 ← 8
+```
+
+Together:
+
+```text
+1 ⇄ 8
+```
+
+The two partitions are now correctly connected.
+
+---
+
+## Step 14: Update the Tail
+
+```java
+tail = (dummy2.next == null) ? prev1 : prev2;
+```
+
+If the greater partition is empty:
+
+```text
+tail = prev1
+```
+
+Otherwise:
+
+```text
+tail = prev2
+```
+
+This ensures that the tail always points to the last real node.
+
+---
+
+# 🖼 Complete Dry Run
+
+Input:
+
+```text
+3 ⇄ 8 ⇄ 5 ⇄ 10 ⇄ 2 ⇄ 1
+
+x = 5
+```
+
+Initial:
+
+```text
+Less:
+
+dummy1
+
+
+Greater:
+
+dummy2
+```
+
+Process `3`:
+
+```text
+Less:
+
+dummy1 ⇄ 3
+```
+
+Process `8`:
+
+```text
+Greater:
+
+dummy2 ⇄ 8
+```
+
+Process `5`:
+
+```text
+Greater:
+
+dummy2 ⇄ 8 ⇄ 5
+```
+
+Process `10`:
+
+```text
+Greater:
+
+dummy2 ⇄ 8 ⇄ 5 ⇄ 10
+```
+
+Process `2`:
+
+```text
+Less:
+
+dummy1 ⇄ 3 ⇄ 2
+```
+
+Process `1`:
+
+```text
+Less:
+
+dummy1 ⇄ 3 ⇄ 2 ⇄ 1
+```
+
+Final temporary chains:
+
+```text
+dummy1 ⇄ 3 ⇄ 2 ⇄ 1
+
+dummy2 ⇄ 8 ⇄ 5 ⇄ 10
+```
+
+Connect:
+
+```text
+3 ⇄ 2 ⇄ 1 ⇄ 8 ⇄ 5 ⇄ 10
+```
+
+Update:
+
+```text
+Head → 3
+
+Tail → 10
+```
+
+Final Result:
+
+```text
+Head
+ ↓
+
+3 ⇄ 2 ⇄ 1 ⇄ 8 ⇄ 5 ⇄ 10
+
+                         ↑
+                        Tail
+```
+
+---
+
+# 🧠 Easy Way to Remember the Logic
+
+The entire solution can be remembered as:
+
+```text
+Create Two Chains
+
+↓
+
+Save Next Node
+
+↓
+
+Disconnect Current Node
+
+↓
+
+Check Value
+
+↓
+
+Add to Less or Greater Chain
+
+↓
+
+Move to Saved Next Node
+
+↓
+
+Connect Both Chains
+
+↓
+
+Update Head and Tail
+```
+
+---
+
+# ❓ Why Are Two Partitions Used?
+
+We need to preserve the relative order of nodes.
+
+For:
+
+```text
+3 ⇄ 8 ⇄ 5 ⇄ 10 ⇄ 2 ⇄ 1
+```
+
+The less values appear as:
+
+```text
+3, 2, 1
+```
+
+They must remain:
+
+```text
+3 ⇄ 2 ⇄ 1
+```
+
+The greater values appear as:
+
+```text
+8, 5, 10
+```
+
+They must remain:
+
+```text
+8 ⇄ 5 ⇄ 10
+```
+
+Building two chains while traversing from left to right naturally preserves this order.
+
+---
+
+# ❓ Why Not Create Two New Linked Lists?
+
+The problem requires rearranging the existing nodes.
+
+We should not create replacement nodes for every value.
+
+The dummy nodes are only temporary helper nodes.
+
+The original nodes are reused and relinked.
+
+---
+
+# ❓ Why Do We Update Both `next` and `prev`?
+
+Because this is a Doubly Linked List.
+
+For a valid connection:
+
+```text
+A ⇄ B
+```
+
+we need:
+
+```text
+A.next = B
+```
+
+and:
+
+```text
+B.prev = A
+```
+
+Updating only one side would break the Doubly Linked List structure.
+
+---
+
+# ⏱ Time Complexity
+
+```text
+Time Complexity : O(n)
+```
+
+Every node is visited exactly once.
+
+Connecting the partitions takes constant time.
+
+Therefore:
+
+```text
+O(n) + O(1)
+
+↓
+
+O(n)
+```
+
+---
+
+# 💾 Space Complexity
+
+```text
+Space Complexity : O(1)
+```
+
+Only a fixed number of pointer variables and two dummy nodes are used.
+
+No additional list, array, set, or map is created.
+
+---
+
+# 📊 Complexity Summary
+
+| Operation               | Complexity |
+| ----------------------- | ---------- |
+| Traverse All Nodes      | O(n)       |
+| Add Node to Partition   | O(1)       |
+| Connect Partitions      | O(1)       |
+| Overall Time Complexity | **O(n)**   |
+| Space Complexity        | **O(1)**   |
+
+---
+
+# 🎓 Key Takeaways
+
+* Create two temporary chains.
+* One chain stores values less than `x`.
+* The other stores values greater than or equal to `x`.
+* Use dummy nodes to simplify partition construction.
+* Save the next node before changing pointers.
+* Disconnect the current node before adding it to a partition.
+* Update both `next` and `prev` pointers.
+* Preserve the original relative order.
+* Connect both partitions after traversal.
+* Correctly update the `head` and `tail`.
+* The solution runs in **O(n)** time and **O(1)** extra space.
+
+---
+
+## 📌 Interview Tip
+
+The most important pattern in this problem is:
+
+```text
+Save → Disconnect → Partition → Reconnect
+```
+
+In code:
+
+```java
+Node nextNode = current.next;
+
+current.next = null;
+current.prev = null;
+```
+
+Then:
+
+```text
+Add Current Node to Correct Partition
+```
+
+Finally:
+
+```text
+Connect Less Partition ⇄ Greater Partition
+```
+
+Whenever a Linked List problem asks you to:
+
+* rearrange nodes,
+* preserve relative order,
+* divide nodes based on a condition,
+
+think about creating **temporary chains with dummy nodes**.
+
+The core strategy is:
+
+```text
+Original List
+
+↓
+
+Divide Into Two Chains
+
+↓
+
+Preserve Relative Order
+
+↓
+
+Connect Both Chains
+
+↓
+
+Update Head and Tail
+```
+
+---
+# 🚀 MyCoding - Data Structures & Algorithms in Java
+
+# 🧠 Strategy 3: Partition List
+
+> ⭐ **Doubly Linked List Interview Question**
+
+The **Partition List** problem requires rearranging the nodes of a Doubly Linked List around a given value `x`.
+
+All nodes with values:
+
+```text
+value < x
+```
+
+must appear before nodes with values:
+
+```text
+value >= x
+```
+
+The relative order of nodes inside each partition must remain unchanged.
+
+The existing nodes must be reused by changing their `next` and `prev` pointers.
+
+---
+
+# 📖 Problem Statement
+
+Write a method called **`partitionList()`** that rearranges a Doubly Linked List so that:
+
+* Nodes with values less than `x` come first.
+* Nodes with values greater than or equal to `x` come afterward.
+* The original relative order inside each group is preserved.
+* The existing nodes are rearranged.
+* Both `next` and `prev` pointers must remain correct.
+
+---
+
+# 📌 Method Signature
+
+```java
+public void partitionList(int x)
+```
+
+---
+
+# 💡 Example 1
+
+### Input
+
+```text
+3 ⇄ 8 ⇄ 5 ⇄ 10 ⇄ 2 ⇄ 1
+
+x = 5
+```
+
+Nodes less than `5`:
+
+```text
+3, 2, 1
+```
+
+Nodes greater than or equal to `5`:
+
+```text
+8, 5, 10
+```
+
+### Output
+
+```text
+3 ⇄ 2 ⇄ 1 ⇄ 8 ⇄ 5 ⇄ 10
+```
+
+Notice that the relative order is preserved.
+
+For the first partition:
+
+```text
+3 → 2 → 1
+```
+
+For the second partition:
+
+```text
+8 → 5 → 10
+```
+
+---
+
+# 💡 Example 2
+
+### Input
+
+```text
+1 ⇄ 2 ⇄ 3
+
+x = 5
+```
+
+Every node is less than `5`.
+
+Therefore, the list remains:
+
+```text
+1 ⇄ 2 ⇄ 3
+```
+
+---
+
+# 💡 Example 3
+
+### Input
+
+```text
+6 ⇄ 7 ⇄ 8
+
+x = 5
+```
+
+Every node is greater than or equal to `5`.
+
+Therefore, the list remains:
+
+```text
+6 ⇄ 7 ⇄ 8
+```
+
+---
+
+# 🎯 Main Challenge
+
+Consider:
+
+```text
+3 ⇄ 8 ⇄ 5 ⇄ 10 ⇄ 2 ⇄ 1
+```
+
+We cannot simply move values around.
+
+We must rearrange the actual nodes.
+
+The desired result is:
+
+```text
+3 ⇄ 2 ⇄ 1 ⇄ 8 ⇄ 5 ⇄ 10
+```
+
+To solve this efficiently, we create two temporary chains:
+
+```text
+Less Partition
+```
+
+and:
+
+```text
+Greater Partition
+```
+
+The first chain stores nodes where:
+
+```text
+value < x
+```
+
+The second chain stores nodes where:
+
+```text
+value >= x
+```
+
+After processing every node, we connect the two chains.
+
+---
+
+# 💡 Recommended Approach
+
+Use:
+
+* Two dummy nodes.
+* Two pointers to build the partitions.
+* One pointer to traverse the original list.
+
+The pointers are:
+
+```text
+dummy1
+prev1
+
+dummy2
+prev2
+
+current
+```
+
+The first chain stores:
+
+```text
+value < x
+```
+
+The second chain stores:
+
+```text
+value >= x
+```
+
+---
+
+# 🖼 Main Idea
+
+Original List:
+
+```text
+3 ⇄ 8 ⇄ 5 ⇄ 10 ⇄ 2 ⇄ 1
+```
+
+After traversal:
+
+```text
+Less Partition
+
+dummy1 ⇄ 3 ⇄ 2 ⇄ 1
+```
+
+And:
+
+```text
+Greater Partition
+
+dummy2 ⇄ 8 ⇄ 5 ⇄ 10
+```
+
+Finally:
+
+```text
+3 ⇄ 2 ⇄ 1
+        ⇅
+8 ⇄ 5 ⇄ 10
+```
+
+Result:
+
+```text
+3 ⇄ 2 ⇄ 1 ⇄ 8 ⇄ 5 ⇄ 10
+```
+
+---
+
+# 💻 Java Solution
+
+```java
+public void partitionList(int x) {
+
+    if (head == null) return;
+
+    Node dummy1 = new Node(0);
+    Node dummy2 = new Node(0);
+
+    Node prev1 = dummy1;
+    Node prev2 = dummy2;
+
+    Node current = head;
+
+    while (current != null) {
+
+        Node nextNode = current.next;
+
+        current.next = null;
+        current.prev = null;
+
+        if (current.value < x) {
+
+            prev1.next = current;
+            current.prev = prev1;
+            prev1 = current;
+
+        } else {
+
+            prev2.next = current;
+            current.prev = prev2;
+            prev2 = current;
+        }
+
+        current = nextNode;
+    }
+
+    if (dummy1.next == null) {
+
+        head = dummy2.next;
+        head.prev = null;
+        tail = prev2;
+
+    } else {
+
+        head = dummy1.next;
+        head.prev = null;
+
+        prev1.next = dummy2.next;
+
+        if (dummy2.next != null) {
+            dummy2.next.prev = prev1;
+        }
+
+        tail = (dummy2.next == null) ? prev1 : prev2;
+    }
+}
+```
+
+---
+
+# ⚙️ Algorithm
+
+1. Check whether the list is empty.
+2. Create two dummy nodes.
+3. Create a pointer for the end of each partition.
+4. Start traversing from the head.
+5. Save the next node before changing any pointers.
+6. Disconnect the current node.
+7. If the current value is less than `x`, add it to the first partition.
+8. Otherwise, add it to the second partition.
+9. Move to the saved next node.
+10. Continue until every node is processed.
+11. Connect the two partitions.
+12. Update the head.
+13. Update the tail.
+14. Remove dummy-node connections from the final list.
+
+---
+
+# 📖 Code Explanation
+
+## Step 1: Handle an Empty List
+
+```java
+if (head == null) return;
+```
+
+If the Doubly Linked List is empty, there is nothing to partition.
+
+Therefore, immediately return.
+
+---
+
+## Step 2: Create Two Dummy Nodes
+
+```java
+Node dummy1 = new Node(0);
+Node dummy2 = new Node(0);
+```
+
+The first dummy node represents the beginning of the:
+
+```text
+Less Partition
+```
+
+The second dummy node represents the beginning of the:
+
+```text
+Greater Partition
+```
+
+Initially:
+
+```text
+dummy1
+```
+
+and:
+
+```text
+dummy2
+```
+
+are separate.
+
+---
+
+# ❓ Why Use Dummy Nodes?
+
+Without dummy nodes, we would need special logic for inserting the first node into each partition.
+
+For example:
+
+```text
+Is this the first node?
+
+Is the partition empty?
+
+Should this become the partition head?
+```
+
+Dummy nodes remove these special cases.
+
+Every node can simply be added after the current partition pointer.
+
+---
+
+## Step 3: Create Partition Pointers
+
+```java
+Node prev1 = dummy1;
+Node prev2 = dummy2;
+```
+
+`prev1` always points to the last node of the less partition.
+
+`prev2` always points to the last node of the greater partition.
+
+Initially:
+
+```text
+prev1
+  ↓
+
+dummy1
+```
+
+and:
+
+```text
+prev2
+  ↓
+
+dummy2
+```
+
+---
+
+## Step 4: Start Traversing the Original List
+
+```java
+Node current = head;
+```
+
+The `current` pointer starts at the first node.
+
+Example:
+
+```text
+current
+   ↓
+
+3 ⇄ 8 ⇄ 5 ⇄ 10 ⇄ 2 ⇄ 1
+```
+
+---
+
+## Step 5: Traverse Every Node
+
+```java
+while (current != null)
+```
+
+Continue processing nodes until the end of the original list is reached.
+
+---
+
+# 🔥 Step 6: Save the Next Node
+
+```java
+Node nextNode = current.next;
+```
+
+This is one of the most important lines in the solution.
+
+We are about to change:
+
+```text
+current.next
+```
+
+Therefore, we must first save the next node.
+
+Example:
+
+```text
+current
+   ↓
+
+3 ⇄ 8 ⇄ 5
+```
+
+Save:
+
+```text
+nextNode → 8
+```
+
+Now we can safely modify the pointers of node `3`.
+
+---
+
+# ❓ Why Do We Need `nextNode`?
+
+Suppose we immediately execute:
+
+```java
+current.next = null;
+```
+
+Then:
+
+```text
+3 → null
+```
+
+We would lose access to:
+
+```text
+8 ⇄ 5 ⇄ 10...
+```
+
+Therefore, first:
+
+```java
+Node nextNode = current.next;
+```
+
+Then modify the pointers.
+
+---
+
+## Step 7: Disconnect the Current Node
+
+```java
+current.next = null;
+current.prev = null;
+```
+
+Before:
+
+```text
+Previous ⇄ Current ⇄ Next
+```
+
+After:
+
+```text
+Previous
+
+Current
+
+Next
+```
+
+The current node is now isolated.
+
+This makes it safer and easier to add the node to one of the two partitions.
+
+---
+
+# 🔀 Step 8: Check the Node Value
+
+```java
+if (current.value < x)
+```
+
+If the value is less than `x`, add the node to the first partition.
+
+Otherwise, add it to the second partition.
+
+---
+
+# 🟢 Adding to the Less Partition
+
+```java
+prev1.next = current;
+current.prev = prev1;
+prev1 = current;
+```
+
+Suppose:
+
+```text
+Less Partition:
+
+dummy1 ⇄ 3
+```
+
+And:
+
+```text
+current → 2
+```
+
+First:
+
+```java
+prev1.next = current;
+```
+
+Creates the forward connection:
+
+```text
+3 → 2
+```
+
+Then:
+
+```java
+current.prev = prev1;
+```
+
+Creates the backward connection:
+
+```text
+3 ← 2
+```
+
+Together:
+
+```text
+3 ⇄ 2
+```
+
+Finally:
+
+```java
+prev1 = current;
+```
+
+moves the partition pointer.
+
+Now:
+
+```text
+dummy1 ⇄ 3 ⇄ 2
+                 ↑
+               prev1
+```
+
+---
+
+# 🔴 Adding to the Greater Partition
+
+```java
+prev2.next = current;
+current.prev = prev2;
+prev2 = current;
+```
+
+The exact same process happens for values greater than or equal to `x`.
+
+Example:
+
+```text
+Greater Partition:
+
+dummy2 ⇄ 8 ⇄ 5
+```
+
+If:
+
+```text
+current → 10
+```
+
+After adding:
+
+```text
+dummy2 ⇄ 8 ⇄ 5 ⇄ 10
+                         ↑
+                       prev2
+```
+
+---
+
+## Step 9: Move to the Next Original Node
+
+```java
+current = nextNode;
+```
+
+Earlier, we saved:
+
+```java
+Node nextNode = current.next;
+```
+
+Now we use that saved reference to continue traversing the original list.
+
+---
+
+# 📊 Complete Traversal Example
+
+Original:
+
+```text
+3 ⇄ 8 ⇄ 5 ⇄ 10 ⇄ 2 ⇄ 1
+
+x = 5
+```
+
+Process `3`:
+
+```text
+Less    : 3
+
+Greater :
+```
+
+Process `8`:
+
+```text
+Less    : 3
+
+Greater : 8
+```
+
+Process `5`:
+
+```text
+Less    : 3
+
+Greater : 8 ⇄ 5
+```
+
+Process `10`:
+
+```text
+Less    : 3
+
+Greater : 8 ⇄ 5 ⇄ 10
+```
+
+Process `2`:
+
+```text
+Less    : 3 ⇄ 2
+
+Greater : 8 ⇄ 5 ⇄ 10
+```
+
+Process `1`:
+
+```text
+Less    : 3 ⇄ 2 ⇄ 1
+
+Greater : 8 ⇄ 5 ⇄ 10
+```
+
+Now connect the partitions.
+
+---
+
+# 🔗 Connecting the Two Partitions
+
+After traversal:
+
+```text
+dummy1 ⇄ 3 ⇄ 2 ⇄ 1
+```
+
+and:
+
+```text
+dummy2 ⇄ 8 ⇄ 5 ⇄ 10
+```
+
+We need:
+
+```text
+3 ⇄ 2 ⇄ 1 ⇄ 8 ⇄ 5 ⇄ 10
+```
+
+---
+
+## Step 10: Handle an Empty Less Partition
+
+```java
+if (dummy1.next == null)
+```
+
+This means there were no values less than `x`.
+
+Example:
+
+```text
+6 ⇄ 7 ⇄ 8
+
+x = 5
+```
+
+The less partition is empty.
+
+Therefore:
+
+```java
+head = dummy2.next;
+head.prev = null;
+tail = prev2;
+```
+
+The greater partition becomes the entire list.
+
+---
+
+## Step 11: Set the New Head
+
+```java
+head = dummy1.next;
+head.prev = null;
+```
+
+The first real node after `dummy1` becomes the new head.
+
+Example:
+
+```text
+dummy1 ⇄ 3 ⇄ 2 ⇄ 1
+```
+
+Therefore:
+
+```text
+head → 3
+```
+
+Since the head should not have a previous node:
+
+```java
+head.prev = null;
+```
+
+---
+
+## Step 12: Connect the Partitions
+
+```java
+prev1.next = dummy2.next;
+```
+
+`prev1` points to the last node of the less partition.
+
+```text
+3 ⇄ 2 ⇄ 1
+        ↑
+      prev1
+```
+
+`dummy2.next` points to the first real node of the greater partition.
+
+```text
+dummy2 ⇄ 8 ⇄ 5 ⇄ 10
+         ↑
+    dummy2.next
+```
+
+Connect them:
+
+```text
+1 → 8
+```
+
+---
+
+## Step 13: Create the Backward Connection
+
+```java
+if (dummy2.next != null) {
+    dummy2.next.prev = prev1;
+}
+```
+
+The forward connection was:
+
+```text
+1 → 8
+```
+
+Now create the backward connection:
+
+```text
+1 ← 8
+```
+
+Together:
+
+```text
+1 ⇄ 8
+```
+
+The two partitions are now correctly connected.
+
+---
+
+## Step 14: Update the Tail
+
+```java
+tail = (dummy2.next == null) ? prev1 : prev2;
+```
+
+If the greater partition is empty:
+
+```text
+tail = prev1
+```
+
+Otherwise:
+
+```text
+tail = prev2
+```
+
+This ensures that the tail always points to the last real node.
+
+---
+
+# 🖼 Complete Dry Run
+
+Input:
+
+```text
+3 ⇄ 8 ⇄ 5 ⇄ 10 ⇄ 2 ⇄ 1
+
+x = 5
+```
+
+Initial:
+
+```text
+Less:
+
+dummy1
+
+
+Greater:
+
+dummy2
+```
+
+Process `3`:
+
+```text
+Less:
+
+dummy1 ⇄ 3
+```
+
+Process `8`:
+
+```text
+Greater:
+
+dummy2 ⇄ 8
+```
+
+Process `5`:
+
+```text
+Greater:
+
+dummy2 ⇄ 8 ⇄ 5
+```
+
+Process `10`:
+
+```text
+Greater:
+
+dummy2 ⇄ 8 ⇄ 5 ⇄ 10
+```
+
+Process `2`:
+
+```text
+Less:
+
+dummy1 ⇄ 3 ⇄ 2
+```
+
+Process `1`:
+
+```text
+Less:
+
+dummy1 ⇄ 3 ⇄ 2 ⇄ 1
+```
+
+Final temporary chains:
+
+```text
+dummy1 ⇄ 3 ⇄ 2 ⇄ 1
+
+dummy2 ⇄ 8 ⇄ 5 ⇄ 10
+```
+
+Connect:
+
+```text
+3 ⇄ 2 ⇄ 1 ⇄ 8 ⇄ 5 ⇄ 10
+```
+
+Update:
+
+```text
+Head → 3
+
+Tail → 10
+```
+
+Final Result:
+
+```text
+Head
+ ↓
+
+3 ⇄ 2 ⇄ 1 ⇄ 8 ⇄ 5 ⇄ 10
+
+                         ↑
+                        Tail
+```
+
+---
+
+# 🧠 Easy Way to Remember the Logic
+
+The entire solution can be remembered as:
+
+```text
+Create Two Chains
+
+↓
+
+Save Next Node
+
+↓
+
+Disconnect Current Node
+
+↓
+
+Check Value
+
+↓
+
+Add to Less or Greater Chain
+
+↓
+
+Move to Saved Next Node
+
+↓
+
+Connect Both Chains
+
+↓
+
+Update Head and Tail
+```
+
+---
+
+# ❓ Why Are Two Partitions Used?
+
+We need to preserve the relative order of nodes.
+
+For:
+
+```text
+3 ⇄ 8 ⇄ 5 ⇄ 10 ⇄ 2 ⇄ 1
+```
+
+The less values appear as:
+
+```text
+3, 2, 1
+```
+
+They must remain:
+
+```text
+3 ⇄ 2 ⇄ 1
+```
+
+The greater values appear as:
+
+```text
+8, 5, 10
+```
+
+They must remain:
+
+```text
+8 ⇄ 5 ⇄ 10
+```
+
+Building two chains while traversing from left to right naturally preserves this order.
+
+---
+
+# ❓ Why Not Create Two New Linked Lists?
+
+The problem requires rearranging the existing nodes.
+
+We should not create replacement nodes for every value.
+
+The dummy nodes are only temporary helper nodes.
+
+The original nodes are reused and relinked.
+
+---
+
+# ❓ Why Do We Update Both `next` and `prev`?
+
+Because this is a Doubly Linked List.
+
+For a valid connection:
+
+```text
+A ⇄ B
+```
+
+we need:
+
+```text
+A.next = B
+```
+
+and:
+
+```text
+B.prev = A
+```
+
+Updating only one side would break the Doubly Linked List structure.
+
+---
+
+# ⏱ Time Complexity
+
+```text
+Time Complexity : O(n)
+```
+
+Every node is visited exactly once.
+
+Connecting the partitions takes constant time.
+
+Therefore:
+
+```text
+O(n) + O(1)
+
+↓
+
+O(n)
+```
+
+---
+
+# 💾 Space Complexity
+
+```text
+Space Complexity : O(1)
+```
+
+Only a fixed number of pointer variables and two dummy nodes are used.
+
+No additional list, array, set, or map is created.
+
+---
+
+# 📊 Complexity Summary
+
+| Operation               | Complexity |
+| ----------------------- | ---------- |
+| Traverse All Nodes      | O(n)       |
+| Add Node to Partition   | O(1)       |
+| Connect Partitions      | O(1)       |
+| Overall Time Complexity | **O(n)**   |
+| Space Complexity        | **O(1)**   |
+
+---
+
+# 🎓 Key Takeaways
+
+* Create two temporary chains.
+* One chain stores values less than `x`.
+* The other stores values greater than or equal to `x`.
+* Use dummy nodes to simplify partition construction.
+* Save the next node before changing pointers.
+* Disconnect the current node before adding it to a partition.
+* Update both `next` and `prev` pointers.
+* Preserve the original relative order.
+* Connect both partitions after traversal.
+* Correctly update the `head` and `tail`.
+* The solution runs in **O(n)** time and **O(1)** extra space.
+
+---
+
+## 📌 Interview Tip
+
+The most important pattern in this problem is:
+
+```text
+Save → Disconnect → Partition → Reconnect
+```
+
+In code:
+
+```java
+Node nextNode = current.next;
+
+current.next = null;
+current.prev = null;
+```
+
+Then:
+
+```text
+Add Current Node to Correct Partition
+```
+
+Finally:
+
+```text
+Connect Less Partition ⇄ Greater Partition
+```
+
+Whenever a Linked List problem asks you to:
+
+* rearrange nodes,
+* preserve relative order,
+* divide nodes based on a condition,
+
+think about creating **temporary chains with dummy nodes**.
+
+The core strategy is:
+
+```text
+Original List
+
+↓
+
+Divide Into Two Chains
+
+↓
+
+Preserve Relative Order
+
+↓
+
+Connect Both Chains
+
+↓
+
+Update Head and Tail
+```
+
+---
+
+
 
