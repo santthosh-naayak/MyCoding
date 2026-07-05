@@ -5776,5 +5776,1345 @@ Update Head or Tail if Needed
 ```
 
 ---
+# 🚀 MyCoding - Data Structures & Algorithms in Java
+
+# 🧠 Strategy 5: Swap Nodes in Pairs
+
+> ⭐ **Doubly Linked List Interview Question**
+
+The **Swap Nodes in Pairs** problem requires swapping every two adjacent nodes in a Doubly Linked List.
+
+The nodes must be swapped by changing their:
+
+```text
+next
+```
+
+and:
+
+```text
+prev
+```
+
+pointers.
+
+The values stored inside the nodes must **not** be modified.
+
+---
+
+# 📖 Problem Statement
+
+Implement a method called **`swapPairs()`** that swaps every two adjacent nodes in a Doubly Linked List.
+
+The method does not take any parameters.
+
+For example:
+
+```text
+1 ⇄ 2 ⇄ 3 ⇄ 4
+```
+
+After calling:
+
+```java
+swapPairs();
+```
+
+the list should become:
+
+```text
+2 ⇄ 1 ⇄ 4 ⇄ 3
+```
+
+The method must rearrange the actual nodes by changing their pointers.
+
+---
+
+# 📌 Method Signature
+
+```java
+public void swapPairs()
+```
+
+---
+
+# 🎯 Constraints
+
+* The Doubly Linked List may be empty.
+* The list may contain only one node.
+* The list may contain an even number of nodes.
+* The list may contain an odd number of nodes.
+* The list does not have a `tail` pointer.
+* The list does not have a `length` attribute.
+* Do not swap the values stored inside nodes.
+* Only modify the `next` and `prev` pointers.
+* Modify the existing linked list in-place.
+
+---
+
+# 💡 Example 1: Even Number of Nodes
+
+### Input
+
+```text
+1 ⇄ 2 ⇄ 3 ⇄ 4
+```
+
+### Output
+
+```text
+2 ⇄ 1 ⇄ 4 ⇄ 3
+```
+
+The pairs are:
+
+```text
+(1, 2)
+
+(3, 4)
+```
+
+After swapping:
+
+```text
+(2, 1)
+
+(4, 3)
+```
+
+Final Result:
+
+```text
+2 ⇄ 1 ⇄ 4 ⇄ 3
+```
+
+---
+
+# 💡 Example 2: Odd Number of Nodes
+
+### Input
+
+```text
+1 ⇄ 2 ⇄ 3 ⇄ 4 ⇄ 5
+```
+
+### Output
+
+```text
+2 ⇄ 1 ⇄ 4 ⇄ 3 ⇄ 5
+```
+
+The pairs are:
+
+```text
+(1, 2)
+
+(3, 4)
+```
+
+The last node:
+
+```text
+5
+```
+
+does not have a partner.
+
+Therefore, it remains unchanged.
+
+---
+
+# 💡 Example 3: Single Node
+
+### Input
+
+```text
+1
+```
+
+### Output
+
+```text
+1
+```
+
+There is no pair to swap.
+
+---
+
+# 💡 Example 4: Empty List
+
+### Input
+
+```text
+null
+```
+
+### Output
+
+```text
+null
+```
+
+There are no nodes to swap.
+
+---
+
+# 🎯 Main Challenge
+
+Consider:
+
+```text
+1 ⇄ 2 ⇄ 3 ⇄ 4
+```
+
+We want:
+
+```text
+2 ⇄ 1 ⇄ 4 ⇄ 3
+```
+
+For the first pair:
+
+```text
+1 ⇄ 2
+```
+
+we need:
+
+```text
+2 ⇄ 1
+```
+
+However, we must also maintain the connections with the nodes surrounding the pair.
+
+For example:
+
+```text
+Previous ⇄ First ⇄ Second ⇄ Next Pair
+```
+
+must become:
+
+```text
+Previous ⇄ Second ⇄ First ⇄ Next Pair
+```
+
+This means several `next` and `prev` pointers must be updated carefully.
+
+---
+
+# 💡 Recommended Approach
+
+Use a **dummy node** before the head.
+
+The dummy node simplifies handling the first pair because swapping the first pair changes the `head`.
+
+Example:
+
+```text
+Dummy ⇄ 1 ⇄ 2 ⇄ 3 ⇄ 4
+```
+
+After swapping the first pair:
+
+```text
+Dummy ⇄ 2 ⇄ 1 ⇄ 3 ⇄ 4
+```
+
+After swapping the second pair:
+
+```text
+Dummy ⇄ 2 ⇄ 1 ⇄ 4 ⇄ 3
+```
+
+Finally:
+
+```text
+head = dummy.next
+```
+
+and disconnect the dummy node.
+
+---
+
+# 💻 Java Solution
+
+```java
+public void swapPairs() {
+
+    Node dummy = new Node(0);
+    dummy.next = head;
+
+    if (head != null) {
+        head.prev = dummy;
+    }
+
+    Node previous = dummy;
+
+    while (previous.next != null &&
+           previous.next.next != null) {
+
+        Node first = previous.next;
+        Node second = first.next;
+        Node afterPair = second.next;
+
+        previous.next = second;
+        second.prev = previous;
+
+        second.next = first;
+        first.prev = second;
+
+        first.next = afterPair;
+
+        if (afterPair != null) {
+            afterPair.prev = first;
+        }
+
+        previous = first;
+    }
+
+    head = dummy.next;
+
+    if (head != null) {
+        head.prev = null;
+    }
+}
+```
+
+---
+
+# ⚙️ Algorithm
+
+1. Create a dummy node.
+2. Connect the dummy node to the head.
+3. Temporarily connect the head's `prev` pointer to the dummy node.
+4. Create a `previous` pointer starting at the dummy node.
+5. Check whether two nodes are available to swap.
+6. Store the first node.
+7. Store the second node.
+8. Store the node after the pair.
+9. Connect the previous section to the second node.
+10. Connect the second node to the first node.
+11. Connect the first node to the remaining list.
+12. Fix all backward `prev` pointers.
+13. Move `previous` to the end of the swapped pair.
+14. Continue with the next pair.
+15. Update the head.
+16. Disconnect the dummy node.
+
+---
+
+# 📖 Code Explanation
+
+## Step 1: Create a Dummy Node
+
+```java
+Node dummy = new Node(0);
+```
+
+Creates a temporary helper node.
+
+Initially:
+
+```text
+dummy
+```
+
+The dummy node simplifies swapping the first pair.
+
+Without a dummy node, we would need special logic for updating the `head`.
+
+---
+
+## Step 2: Connect Dummy to Head
+
+```java
+dummy.next = head;
+```
+
+Suppose the list is:
+
+```text
+1 ⇄ 2 ⇄ 3 ⇄ 4
+```
+
+After:
+
+```java
+dummy.next = head;
+```
+
+we get:
+
+```text
+Dummy → 1 ⇄ 2 ⇄ 3 ⇄ 4
+```
+
+---
+
+## Step 3: Connect Head Back to Dummy
+
+```java
+if (head != null) {
+    head.prev = dummy;
+}
+```
+
+Because this is a Doubly Linked List, we also temporarily create the backward connection.
+
+Now:
+
+```text
+Dummy ⇄ 1 ⇄ 2 ⇄ 3 ⇄ 4
+```
+
+The dummy node is only temporary.
+
+It will be removed at the end.
+
+---
+
+## Step 4: Create the `previous` Pointer
+
+```java
+Node previous = dummy;
+```
+
+The `previous` pointer represents the node immediately before the pair being swapped.
+
+Initially:
+
+```text
+previous
+   ↓
+
+Dummy ⇄ 1 ⇄ 2 ⇄ 3 ⇄ 4
+```
+
+The first pair is:
+
+```text
+1 ⇄ 2
+```
+
+---
+
+# 🔥 Step 5: Check Whether a Pair Exists
+
+```java
+while (previous.next != null &&
+       previous.next.next != null)
+```
+
+This checks whether at least two nodes are available.
+
+The first condition:
+
+```java
+previous.next != null
+```
+
+checks whether the first node exists.
+
+The second condition:
+
+```java
+previous.next.next != null
+```
+
+checks whether the second node exists.
+
+If both nodes exist, they can be swapped.
+
+---
+
+# 🧠 Why Do We Need Both Conditions?
+
+Suppose:
+
+```text
+1 ⇄ 2 ⇄ 3
+```
+
+After swapping:
+
+```text
+2 ⇄ 1 ⇄ 3
+```
+
+The final node:
+
+```text
+3
+```
+
+has no partner.
+
+Eventually:
+
+```text
+previous.next → 3
+```
+
+but:
+
+```text
+previous.next.next → null
+```
+
+Therefore, the loop stops.
+
+---
+
+# 🔗 Step 6: Store the Three Important Nodes
+
+```java
+Node first = previous.next;
+Node second = first.next;
+Node afterPair = second.next;
+```
+
+Suppose:
+
+```text
+Dummy ⇄ 1 ⇄ 2 ⇄ 3 ⇄ 4
+```
+
+Then:
+
+```text
+previous → Dummy
+
+first → 1
+
+second → 2
+
+afterPair → 3
+```
+
+Visualization:
+
+```text
+previous      first      second      afterPair
+
+   ↓            ↓           ↓            ↓
+
+ Dummy    ⇄     1     ⇄     2     ⇄      3
+```
+
+These four positions are the key to solving the problem.
+
+---
+
+# 🔥 Swapping the Pair
+
+Before:
+
+```text
+previous ⇄ first ⇄ second ⇄ afterPair
+```
+
+After:
+
+```text
+previous ⇄ second ⇄ first ⇄ afterPair
+```
+
+We must create all required forward and backward connections.
+
+---
+
+## Step 7: Connect Previous to Second
+
+```java
+previous.next = second;
+```
+
+Before:
+
+```text
+previous → first
+```
+
+After:
+
+```text
+previous → second
+```
+
+Example:
+
+```text
+Dummy → 2
+```
+
+---
+
+## Step 8: Connect Second Back to Previous
+
+```java
+second.prev = previous;
+```
+
+Creates the backward connection.
+
+Now:
+
+```text
+Dummy ⇄ 2
+```
+
+The first connection is complete.
+
+---
+
+## Step 9: Connect Second to First
+
+```java
+second.next = first;
+```
+
+Before:
+
+```text
+1 → 2
+```
+
+After:
+
+```text
+2 → 1
+```
+
+---
+
+## Step 10: Connect First Back to Second
+
+```java
+first.prev = second;
+```
+
+Creates the backward connection.
+
+Now:
+
+```text
+2 ⇄ 1
+```
+
+The two nodes have been swapped.
+
+---
+
+## Step 11: Connect First to the Remaining List
+
+```java
+first.next = afterPair;
+```
+
+The original first node is now the second node of the swapped pair.
+
+It must connect to the remaining list.
+
+Example:
+
+```text
+2 ⇄ 1 → 3 ⇄ 4
+```
+
+---
+
+## Step 12: Fix the Backward Connection
+
+```java
+if (afterPair != null) {
+    afterPair.prev = first;
+}
+```
+
+If a node exists after the pair, its `prev` pointer must point back to `first`.
+
+Before:
+
+```text
+3.prev → 2
+```
+
+After:
+
+```text
+3.prev → 1
+```
+
+Now:
+
+```text
+2 ⇄ 1 ⇄ 3 ⇄ 4
+```
+
+The first pair has been successfully swapped.
+
+---
+
+# 🔥 Step 13: Move `previous`
+
+```java
+previous = first;
+```
+
+This is one of the most important lines in the solution.
+
+After swapping:
+
+```text
+2 ⇄ 1 ⇄ 3 ⇄ 4
+```
+
+The node `first` is now at the end of the swapped pair.
+
+Therefore:
+
+```text
+previous → 1
+```
+
+The next pair starts at:
+
+```text
+previous.next → 3
+```
+
+and:
+
+```text
+previous.next.next → 4
+```
+
+So the next pair is:
+
+```text
+3 ⇄ 4
+```
+
+---
+
+# 📊 Complete Dry Run
+
+Consider:
+
+```text
+1 ⇄ 2 ⇄ 3 ⇄ 4
+```
+
+---
+
+## Initial Setup
+
+Create dummy:
+
+```text
+Dummy ⇄ 1 ⇄ 2 ⇄ 3 ⇄ 4
+```
+
+Pointers:
+
+```text
+previous → Dummy
+```
+
+---
+
+# 🔄 First Iteration
+
+Current Pair:
+
+```text
+1 ⇄ 2
+```
+
+Pointers:
+
+```text
+previous → Dummy
+
+first → 1
+
+second → 2
+
+afterPair → 3
+```
+
+Before:
+
+```text
+Dummy ⇄ 1 ⇄ 2 ⇄ 3 ⇄ 4
+```
+
+Connect:
+
+```text
+Dummy ⇄ 2
+```
+
+Then:
+
+```text
+Dummy ⇄ 2 ⇄ 1
+```
+
+Then:
+
+```text
+Dummy ⇄ 2 ⇄ 1 ⇄ 3 ⇄ 4
+```
+
+Move:
+
+```text
+previous → 1
+```
+
+---
+
+# 🔄 Second Iteration
+
+Current Pair:
+
+```text
+3 ⇄ 4
+```
+
+Pointers:
+
+```text
+previous → 1
+
+first → 3
+
+second → 4
+
+afterPair → null
+```
+
+Before:
+
+```text
+Dummy ⇄ 2 ⇄ 1 ⇄ 3 ⇄ 4
+```
+
+Connect:
+
+```text
+1 ⇄ 4
+```
+
+Then:
+
+```text
+1 ⇄ 4 ⇄ 3
+```
+
+Since:
+
+```text
+afterPair == null
+```
+
+there is no remaining node to reconnect.
+
+Result:
+
+```text
+Dummy ⇄ 2 ⇄ 1 ⇄ 4 ⇄ 3
+```
+
+Move:
+
+```text
+previous → 3
+```
+
+The loop stops because another pair does not exist.
+
+---
+
+# 🔗 Update the Head
+
+```java
+head = dummy.next;
+```
+
+Currently:
+
+```text
+Dummy ⇄ 2 ⇄ 1 ⇄ 4 ⇄ 3
+```
+
+Therefore:
+
+```text
+head → 2
+```
+
+---
+
+# 🔗 Disconnect the Dummy Node
+
+```java
+if (head != null) {
+    head.prev = null;
+}
+```
+
+The head should not have a previous node.
+
+Before:
+
+```text
+Dummy ← 2
+```
+
+After:
+
+```text
+null ← 2
+```
+
+Final List:
+
+```text
+2 ⇄ 1 ⇄ 4 ⇄ 3
+```
+
+---
+
+# 🖼 Complete Visualization
+
+Original:
+
+```text
+Head
+ ↓
+
+1 ⇄ 2 ⇄ 3 ⇄ 4
+```
+
+Add Dummy:
+
+```text
+previous
+   ↓
+
+Dummy ⇄ 1 ⇄ 2 ⇄ 3 ⇄ 4
+```
+
+Swap First Pair:
+
+```text
+Dummy ⇄ 2 ⇄ 1 ⇄ 3 ⇄ 4
+```
+
+Move `previous`:
+
+```text
+              previous
+                  ↓
+
+Dummy ⇄ 2 ⇄ 1 ⇄ 3 ⇄ 4
+```
+
+Swap Second Pair:
+
+```text
+Dummy ⇄ 2 ⇄ 1 ⇄ 4 ⇄ 3
+```
+
+Remove Dummy:
+
+```text
+Head
+ ↓
+
+2 ⇄ 1 ⇄ 4 ⇄ 3
+```
+
+---
+
+# 🧠 Easy Way to Remember the Logic
+
+For every pair, remember these four pointers:
+
+```text
+previous
+
+first
+
+second
+
+afterPair
+```
+
+Before:
+
+```text
+previous ⇄ first ⇄ second ⇄ afterPair
+```
+
+After:
+
+```text
+previous ⇄ second ⇄ first ⇄ afterPair
+```
+
+The pointer updates are:
+
+```java
+previous.next = second;
+second.prev = previous;
+
+second.next = first;
+first.prev = second;
+
+first.next = afterPair;
+
+if (afterPair != null) {
+    afterPair.prev = first;
+}
+```
+
+Then:
+
+```java
+previous = first;
+```
+
+---
+
+# 🧠 Even Simpler Pattern
+
+Remember:
+
+```text
+Previous → Second
+```
+
+Then:
+
+```text
+Second → First
+```
+
+Then:
+
+```text
+First → After Pair
+```
+
+Because this is a Doubly Linked List, also fix every backward connection.
+
+So:
+
+```text
+Previous ⇄ Second ⇄ First ⇄ After Pair
+```
+
+---
+
+# ❓ Why Use a Dummy Node?
+
+The first pair contains the current `head`.
+
+For example:
+
+```text
+1 ⇄ 2 ⇄ 3 ⇄ 4
+```
+
+After swapping:
+
+```text
+2 ⇄ 1 ⇄ 3 ⇄ 4
+```
+
+The head changes from:
+
+```text
+1
+```
+
+to:
+
+```text
+2
+```
+
+A dummy node gives us a node before the head.
+
+```text
+Dummy ⇄ 1 ⇄ 2
+```
+
+Now swapping the first pair works exactly like swapping every other pair.
+
+---
+
+# ❓ Why Save `afterPair`?
+
+```java
+Node afterPair = second.next;
+```
+
+We are about to modify:
+
+```text
+second.next
+```
+
+Without saving the node after the pair, we could lose access to the remaining list.
+
+The safe pattern is:
+
+```text
+Save Remaining List
+
+↓
+
+Change Pointers
+
+↓
+
+Reconnect Remaining List
+```
+
+---
+
+# ❓ Why Move `previous = first`?
+
+Before swapping:
+
+```text
+previous ⇄ first ⇄ second ⇄ afterPair
+```
+
+After swapping:
+
+```text
+previous ⇄ second ⇄ first ⇄ afterPair
+```
+
+The original `first` node is now the last node of the swapped pair.
+
+Therefore:
+
+```java
+previous = first;
+```
+
+positions `previous` correctly before the next pair.
+
+---
+
+# ⚠️ Edge Cases
+
+## Empty List
+
+Input:
+
+```text
+null
+```
+
+The loop does not execute.
+
+Result:
+
+```text
+null
+```
+
+---
+
+## Single Node
+
+Input:
+
+```text
+1
+```
+
+The loop condition fails because a second node does not exist.
+
+Result:
+
+```text
+1
+```
+
+---
+
+## Two Nodes
+
+Input:
+
+```text
+1 ⇄ 2
+```
+
+Result:
+
+```text
+2 ⇄ 1
+```
+
+---
+
+## Even Number of Nodes
+
+Input:
+
+```text
+1 ⇄ 2 ⇄ 3 ⇄ 4
+```
+
+Result:
+
+```text
+2 ⇄ 1 ⇄ 4 ⇄ 3
+```
+
+---
+
+## Odd Number of Nodes
+
+Input:
+
+```text
+1 ⇄ 2 ⇄ 3 ⇄ 4 ⇄ 5
+```
+
+Result:
+
+```text
+2 ⇄ 1 ⇄ 4 ⇄ 3 ⇄ 5
+```
+
+The final node remains unchanged.
+
+---
+
+# ⏱ Time Complexity
+
+```text
+Time Complexity : O(n)
+```
+
+Every node is processed at most once.
+
+Each pair requires only constant-time pointer updates.
+
+Therefore, the overall time complexity is:
+
+```text
+O(n)
+```
+
+---
+
+# 💾 Space Complexity
+
+```text
+Space Complexity : O(1)
+```
+
+Only a fixed number of pointer variables and one dummy node are used.
+
+No additional arrays, lists, sets, or maps are created.
+
+---
+
+# 📊 Complexity Summary
+
+| Operation               | Complexity |
+| ----------------------- | ---------- |
+| Traverse the List       | O(n)       |
+| Swap Each Pair          | O(1)       |
+| Update Head             | O(1)       |
+| Overall Time Complexity | **O(n)**   |
+| Space Complexity        | **O(1)**   |
+
+---
+
+# 🎓 Key Takeaways
+
+* Swap the actual nodes, not their values.
+* Use a dummy node to simplify handling the head.
+* Check whether two nodes exist before swapping.
+* Keep track of `previous`, `first`, `second`, and `afterPair`.
+* Save the remaining list before changing pointers.
+* Connect `previous` to `second`.
+* Connect `second` to `first`.
+* Connect `first` to `afterPair`.
+* Update both `next` and `prev` pointers.
+* Move `previous` to the end of the swapped pair.
+* An unpaired final node remains unchanged.
+* The solution runs in **O(n)** time and **O(1)** extra space.
+
+---
+
+## 📌 Interview Tip
+
+The easiest way to understand this problem is to forget the entire list temporarily and focus on only four positions:
+
+```text
+previous ⇄ first ⇄ second ⇄ afterPair
+```
+
+Your only goal is to transform it into:
+
+```text
+previous ⇄ second ⇄ first ⇄ afterPair
+```
+
+Then move:
+
+```text
+previous = first
+```
+
+and repeat.
+
+The core pattern is:
+
+```text
+Find Pair
+
+↓
+
+Save After Pair
+
+↓
+
+Previous ⇄ Second
+
+↓
+
+Second ⇄ First
+
+↓
+
+First ⇄ After Pair
+
+↓
+
+Move Previous
+
+↓
+
+Repeat
+```
+
+---
+
 
 
