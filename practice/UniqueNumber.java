@@ -23,7 +23,7 @@ Explanation: 3 and 4 occur exactly once
 Example 3: Multiple Unique element
 Input: arr[] = [1, 3, 2, 1, 4, 5, 2, 1]
 Output: [3, 4, 5]
-Explanation: 3 and 4 occur exactly once
+Explanation: 3, 4 and 5 occur exactly once
 */
 public class UniqueNumber {
     /*
