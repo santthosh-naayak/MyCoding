@@ -63,10 +63,10 @@ public class LRUCache {
     public LRUCache(int capacity) {
         this.capacity = capacity;
         // Create the HashMap for fast key-to-node lookup
-        cache = new HashMap<>();
+        this.cache = new HashMap<>();
         // Create dummy head and tail nodes
-        head = new Node(0, 0);
-        tail = new Node(0, 0);
+        this.head = new Node(0, 0);
+        this.tail = new Node(0, 0);
         // Connect the empty doubly linked list
         head.next = tail;
         tail.prev = head;
@@ -86,11 +86,15 @@ public class LRUCache {
     }
 
     public void put(int key, int value) {
-        // Update and move an existing Node to the MRU position.
+        /*
+         * If the key already exists, update its value and move the node to the MRU
+         * position.
+         */
         if (cache.containsKey(key)) {
             Node existingNode = cache.get(key);
+            existingNode.value = value;
             removeNode(existingNode);
-            cache.remove(key);
+            addToEnd(existingNode);
             return;
         }
         // Create and store a new Node.
