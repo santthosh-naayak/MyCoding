@@ -35,9 +35,9 @@ The objective is to become a better problem solver, not just solve individual qu
 ```text
 Progress
 
-███████████□□□□□□□□□□□□□□
+████████████□□□□□□□□□□□□□
 
-11 / 35 Problems Completed
+12 / 35 Problems Completed
 ```
 
 ---
@@ -109,7 +109,7 @@ Shortest Path Algorithms
 |  ✅  |       11       |      6     |  210 | Course Schedule II                             | BFS + Topological Sort      | Kahn's Algorithm                     |
 |  ⏳  |       12       |      2     |  200 | Number of Islands                              | DFS + Graph                 | DFS Flood Fill                       |
 |  ⏳  |       13       |      9     |  297 | Serialize & Deserialize Binary Tree            | Trees + DFS                 | DFS Serialization                    |
-|  ⏳  |       14       |     10     |  215 | Kth Largest Element in an Array                | Heap                        | Min Heap / Quickselect               |
+|  ✅  |       14       |     10     |  215 | Kth Largest Element in an Array                | Heap                        | Min Heap / Quickselect               |
 |  ⏳  |       15       |     11     |   4  | Median of Two Sorted Arrays                    | Binary Search               | Partition Binary Search              |
 |  ⏳  |       16       |     13     |  127 | Word Ladder                                    | BFS                         | Level-by-Level BFS                   |
 |  ⏳  |       17       |     14     |  23  | Merge K Sorted Lists                           | Heap + Linked List          | Min Heap Merge                       |
@@ -210,3 +210,27 @@ Every problem in this repository follows the same structure:
 By completing these 35 problems, I aim to build strong intuition for the most common interview patterns and confidently solve unseen problems by recognizing the underlying strategy rather than relying on memorized solutions.
 
 > **Learn the pattern. Understand the strategy. Solve any variation.**
+
+
+# 🏆 Patterns Mastered
+
+| Pattern | Status |
+|---------|--------|
+| Arrays | ✅ |
+| HashMap | ✅ |
+| Hashing | ✅ |
+| Prefix & Suffix | ✅ |
+| Sliding Window | ✅ |
+| Two Pointers | ✅ |
+| Intervals | ✅ |
+| Linked List Design | ✅ |
+| Tree DFS | ✅ |
+| Graph BFS / Topological Sort | ✅ |
+| Heap (Priority Queue) | ✅ |
+| Binary Search | ⏳ |
+| Dynamic Programming | ⏳ |
+| Trie | ⏳ |
+| Backtracking | ⏳ |
+| Union Find | ⏳ |
+| Monotonic Stack | ⏳ |
+| Dijkstra | ⏳ |
