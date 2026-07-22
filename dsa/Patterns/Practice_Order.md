@@ -35,9 +35,9 @@ The objective is to become a better problem solver, not just solve individual qu
 ```text
 Progress
 
-████████████□□□□□□□□□□□□□
+█████████████□□□□□□□□□□□□
 
-12 / 35 Problems Completed
+13 / 35 Problems Completed
 ```
 
 ---
@@ -107,7 +107,7 @@ Shortest Path Algorithms
 |  ✅  |        9       |      4     |  146 | LRU Cache                                      | Design                      | HashMap + Doubly Linked List         |
 |  ✅  |       10       |      5     |  98  | Validate Binary Search Tree                    | DFS                         | Valid Range (Min / Max)              |
 |  ✅  |       11       |      6     |  210 | Course Schedule II                             | BFS + Topological Sort      | Kahn's Algorithm                     |
-|  ⏳  |       12       |      2     |  200 | Number of Islands                              | DFS + Graph                 | DFS Flood Fill                       |
+|  ✅  |       12       |      2     |  200 | Number of Islands                              | DFS + Graph                 | DFS Flood Fill                       |
 |  ⏳  |       13       |      9     |  297 | Serialize & Deserialize Binary Tree            | Trees + DFS                 | DFS Serialization                    |
 |  ✅  |       14       |     10     |  215 | Kth Largest Element in an Array                | Heap                        | Min Heap / Quickselect               |
 |  ⏳  |       15       |     11     |   4  | Median of Two Sorted Arrays                    | Binary Search               | Partition Binary Search              |
