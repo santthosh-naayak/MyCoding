@@ -30,14 +30,14 @@ The objective is to become a better problem solver, not just solve individual qu
 
 | Completed | Remaining |  Total |
 | :-------: | :-------: | :----: |
-|  **11** ✅ |  **24** ⏳ | **35** |
+|  **14** ✅ |  **21** ⏳ | **35** |
 
 ```text
 Progress
 
-█████████████□□□□□□□□□□□□
+██████████████□□□□□□□□□□□
 
-13 / 35 Problems Completed
+14 / 35 Problems Completed
 ```
 
 ---
@@ -110,7 +110,7 @@ Shortest Path Algorithms
 |  ✅  |       12       |      2     |  200 | Number of Islands                              | DFS + Graph                 | DFS Flood Fill                       |
 |  ⏳  |       13       |      9     |  297 | Serialize & Deserialize Binary Tree            | Trees + DFS                 | DFS Serialization                    |
 |  ✅  |       14       |     10     |  215 | Kth Largest Element in an Array                | Heap                        | Min Heap / Quickselect               |
-|  ⏳  |       15       |     11     |   4  | Median of Two Sorted Arrays                    | Binary Search               | Partition Binary Search              |
+|  ✅  |       15       |     11     |   4  | Median of Two Sorted Arrays                    | Binary Search               | Partition Binary Search              |
 |  ⏳  |       16       |     13     |  127 | Word Ladder                                    | BFS                         | Level-by-Level BFS                   |
 |  ⏳  |       17       |     14     |  23  | Merge K Sorted Lists                           | Heap + Linked List          | Min Heap Merge                       |
 |  ⏳  |       18       |     17     |  322 | Coin Change                                    | Dynamic Programming         | Bottom-Up DP                         |
