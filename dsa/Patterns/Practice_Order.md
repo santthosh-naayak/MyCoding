@@ -30,14 +30,14 @@ The objective is to become a better problem solver, not just solve individual qu
 
 | Completed | Remaining |  Total |
 | :-------: | :-------: | :----: |
-|  **14** ✅ |  **21** ⏳ | **35** |
+|  **15** ✅ |  **20** ⏳ | **35** |
 
 ```text
 Progress
 
-██████████████□□□□□□□□□□□
+███████████████□□□□□□□□□□
 
-14 / 35 Problems Completed
+15 / 35 Problems Completed
 ```
 
 ---
@@ -108,7 +108,7 @@ Shortest Path Algorithms
 |  ✅  |       10       |      5     |  98  | Validate Binary Search Tree                    | DFS                         | Valid Range (Min / Max)              |
 |  ✅  |       11       |      6     |  210 | Course Schedule II                             | BFS + Topological Sort      | Kahn's Algorithm                     |
 |  ✅  |       12       |      2     |  200 | Number of Islands                              | DFS + Graph                 | DFS Flood Fill                       |
-|  ⏳  |       13       |      9     |  297 | Serialize & Deserialize Binary Tree            | Trees + DFS                 | DFS Serialization                    |
+|  ✅  |       13       |      9     |  297 | Serialize & Deserialize Binary Tree            | Trees + DFS                 | DFS Serialization                    |
 |  ✅  |       14       |     10     |  215 | Kth Largest Element in an Array                | Heap                        | Min Heap / Quickselect               |
 |  ✅  |       15       |     11     |   4  | Median of Two Sorted Arrays                    | Binary Search               | Partition Binary Search              |
 |  ⏳  |       16       |     13     |  127 | Word Ladder                                    | BFS                         | Level-by-Level BFS                   |
@@ -227,7 +227,7 @@ By completing these 35 problems, I aim to build strong intuition for the most co
 | Tree DFS | ✅ |
 | Graph BFS / Topological Sort | ✅ |
 | Heap (Priority Queue) | ✅ |
-| Binary Search | ⏳ |
+| Binary Search | ✅  |
 | Dynamic Programming | ⏳ |
 | Trie | ⏳ |
 | Backtracking | ⏳ |
