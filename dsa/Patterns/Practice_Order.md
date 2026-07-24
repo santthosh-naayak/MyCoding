@@ -30,14 +30,14 @@ The objective is to become a better problem solver, not just solve individual qu
 
 | Completed | Remaining |  Total |
 | :-------: | :-------: | :----: |
-|  **16** ✅ |  **20** ⏳ | **35** |
+|  **17** ✅ |  **19** ⏳ | **35** |
 
 ```text
 Progress
 
-████████████████□□□□□□□□□
+█████████████████□□□□□□□□
 
-16 / 35 Problems Completed
+17 / 35 Problems Completed
 ```
 
 ---
@@ -112,7 +112,7 @@ Shortest Path Algorithms
 |  ✅  |       14       |     10     |  215 | Kth Largest Element in an Array                | Heap                        | Min Heap / Quickselect               |
 |  ✅  |       15       |     11     |   4  | Median of Two Sorted Arrays                    | Binary Search               | Partition Binary Search              |
 |  ✅  |       16       |     13     |  127 | Word Ladder                                    | BFS                         | Level-by-Level BFS                   |
-|  ⏳  |       17       |     14     |  23  | Merge K Sorted Lists                           | Heap + Linked List          | Min Heap Merge                       |
+|  ✅  |       17       |     14     |  23  | Merge K Sorted Lists                           | Heap + Linked List          | Min Heap Merge                       |
 |  ⏳  |       18       |     17     |  322 | Coin Change                                    | Dynamic Programming         | Bottom-Up DP                         |
 |  ⏳  |       19       |     18     |  33  | Search in Rotated Sorted Array                 | Binary Search               | Find Sorted Half                     |
 |  ⏳  |       20       |     20     |  102 | Binary Tree Level Order Traversal              | BFS (Tree)                  | Queue Level Traversal                |
